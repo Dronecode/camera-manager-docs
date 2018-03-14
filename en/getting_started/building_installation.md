@@ -31,8 +31,7 @@ Optional packages include:
 
 The following sections show how to install the required packages on Ubuntu 16.04 LTS.
 
-<span id="core_deps"></span>
-### Core Dependencies
+### Core Dependencies {#core_deps}
 
 The core dependencies are required to build CSD with MAVLink and RTSP video streaming support.
 ```sh
@@ -96,6 +95,17 @@ This fetches all the sources for the project (including the [MAVLink C library](
   git clone https://github.com/intel/camera-streaming-daemon.git --recursive
   ```
 
+### Serve Camera Definition Files 
+
+Before running CSD with MAVLink enabled on *Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
+1. Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+1. Enter the following command to start the server on port 8080:
+   ```
+   python -m SimpleHTTPServer 8080
+   ```
+
+> **Tip** This step is not needed if you are running CSD without MAVLink enabled, or on Aero. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
+
 
 ## Configure
 
@@ -137,7 +147,7 @@ make
 
 The *csd* executable will be created in the root of your CSD source tree (along with the Intel Aero CSD startup file: **csd.service**).
 
-## Run
+## Run{#run_csd}
 
 The line below shows how to start CSD, specifying a [CSD Configuration File](../guide/configuration_file.md) (in this case the Ubuntu **.conf** file in the source tree):
 ```

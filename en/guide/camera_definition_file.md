@@ -1,18 +1,23 @@
 # Camera Definition File
 
-A MAVLink [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) contains information about a camera's advanced settings and parameters. If specified for a particular camera, these are downloaded by clients using a URI supplied by the camera (CSD).
+As defined in the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html), a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) may be used to specify information about a camera's advanced settings and parameters. If requested, a camera can supply the URI for its definition file, which can then be downloaded and parsed by the client.
+
+CSD needs to be able to supply the URI locations for attached camera's definition files (if they are available/exist). The computer running CSD may also need to *serve* the definition files so that they can be downloaded by clients running on the same MAVLink network.
 
 This topic explains how to:
-* Specify the mapping (in CSD) between cameras and their definition file URIs.
 * Serve the definition files on the CSD companion computer.
+* Map attached cameras to their definition file URIs in the CSD configuration file.
 
-> **Tip** CSD does not need to know anything about the *content* of the definition file. For more information see [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html) and [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html).
+> **Tip** Camera definition files for a number of cameras are provided in [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def).
 
 
 ## Hosting Camera Definition Files
 
 Usually the computer that is hosting CSD should also serve the *Camera Definition Files* (to ensure that they are accessible to clients running on the same network). We recommend using the Python *SimpleHTTPServer* because it is lightweight, and because the fact that it is present in many Linux distributions (as part of Python) means that it requires no additional setup.
 
+> **Note** Intel Aero uses *SimpleHTTPServer* by default (so this does not need to be set up on Aero).
+
+<span></span>
 > **Tip** The definition files may be hosted at any URI that is *accessible to requesting clients*. On some connected systems this could mean "anywhere on the Internet".
 
 To run *SimpleHTTPServer*:
@@ -32,7 +37,7 @@ Assuming the directory contained a file **camera-def.xml** it would now be acces
   ```
   http://127.0.0.1:8080/camera-def.xml
   ```
-* On the network (the `drone_ip>` can be obtained using *ifconfig*):
+* On the network (the `<drone_ip>` can be obtained using *ifconfig*):
   ```
   http://<drone_ip>:8080/camera-def.xml
   ```
@@ -40,7 +45,7 @@ Assuming the directory contained a file **camera-def.xml** it would now be acces
 
 ## CSD Definition File Mapping
 
-The CSD mapping between a camera device id and the URI for a *Camera Definition File* URI is specified in the [\[uri section\]](../guide/configuration_file.md#uri) of the *CSD Configuration File*. 
+The CSD mapping between a camera device id and the URI for a *Camera Definition File* is specified in the [\[uri section\]](../guide/configuration_file.md#uri) of the *CSD Configuration File*. 
 
 The fragments below show typical mappings for Aero and Ubuntu:
 * Aero

@@ -87,11 +87,16 @@ system_id=2
 
 Key | Description | Default
 -- | --- | ---
-`<camera-device-id>` | URI for the [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) of the camera device <camera-device-id> | -
+`<camera-device-id>` | URI for the [Camera Definition File](../guide/camera_definition_file.md) of the camera device `<camera-device-id>` | -
 
-> **Note** The [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html) expects cameras to supply the URL for a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) that contains camera capability/setting parameters. The location of this file is supplied to the CSD in this section using the device id. 
+> **Note** CSD needs to be able to supply URI locations of [Camera Definition Files](../guide/camera_definition_file.md) for attached cameras. CSD determines the URI for each camera using the mappings in this section.
 
-Example:
+Example: 
+<!-- 
+examples below need to be updated once files are updated:
+https://github.com/intel/camera-streaming-daemon/issues/139
+https://github.com/intel/camera-streaming-daemon/issues/144
+-->
 
 Gazebo
 ```
@@ -104,7 +109,7 @@ gazebo=http://127.0.0.1/camera-def-R200rgb.xml
 Aero
 ```
 [uri]
-video13=http://127.0.0.1/camera-def-R200rgb.xml
+video13=http://192.168.8.1:8000/camera-def-rs-rgb.xml
 video1=http://127.0.0.1/camera-def.xml
 video02=dummy
 ```

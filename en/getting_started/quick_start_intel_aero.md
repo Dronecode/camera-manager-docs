@@ -60,6 +60,7 @@ To deploy CSD to Aero:
   scp samples/files/aero.conf uname@ip-addr:/etc/csd/main.conf
   scp csd.system uname@ip-addr:/lib/system/system/csd.system
   ```
+  
 
 
 ## Verify Installation

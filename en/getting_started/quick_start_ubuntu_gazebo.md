@@ -59,6 +59,12 @@ To run CSD on Ubuntu along with Gazebo PX4-SITL:
    ```
    make posix gazebo_typhoon_h480
    ```
+1. Serve the sample [Camera Definition Files](../guide/camera_definition_file.md):
+   * Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+   * Enter the following command to start the server on port 8080:
+     ```
+     python -m SimpleHTTPServer 8080
+     ```
 1. Run CSD, specifying the Gazebo [configuration file](../getting_started/building_installation.md#configuration-file-runtime):
    ```sh
    ./csd -c samples/files/gazebo.conf

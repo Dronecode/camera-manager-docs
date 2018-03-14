@@ -30,6 +30,12 @@ This Quickstart shows how to build CSD on Ubuntu LTS 16.04 (with support for MAV
    ```
 1. Attach supported cameras to Ubuntu.
    > **Note** Any camera that supports the [Video4Linux (V4L2) API](https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/v4l2.html) should be automatically detected. Some readily-available cameras that are known to work are: *Logitech C270 HD Webcam*, *Sony PlayStation Eye Camera*, *Intel RealSense*.
+1. Serve the sample [Camera Definition Files](../guide/camera_definition_file.md):
+   * Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+   * Enter the following command to start the server on port 8080:
+     ```
+     python -m SimpleHTTPServer 8080
+     ```
 1. Run CSD specifying Ubuntu [configuration file](../getting_started/building_installation.md#configuration-file-runtime).
    ```
    ./csd -c samples/files/ubuntu.conf

@@ -28,9 +28,8 @@ This Quickstart shows how to build CSD on Ubuntu LTS 16.04 (with support for MAV
    ```
    make
    ```
-1. Attach supported cameras to Ubuntu.
-   > **Note** Any camera that supports the [Video4Linux (V4L2) API](https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/v4l2.html) should be automatically detected. Some readily-available cameras that are known to work are: *Logitech C270 HD Webcam*, *Sony PlayStation Eye Camera*, *Intel RealSense*.
-1. Run CSD specifying Ubuntu [configuration file](../getting_started/building_installation.md#configuration-file-runtime).
+1. Attach [CSD-compatible cameras](../guide/overview.md#supported_cameras) to Ubuntu.
+1. Run CSD specifying the Ubuntu [configuration file](../getting_started/building_installation.md#configuration-file-runtime).
    ```
    ./csd -c samples/files/ubuntu.conf
    ```

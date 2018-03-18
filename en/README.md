@@ -1,7 +1,6 @@
 # Camera Streaming Daemon
 
-[![Build Status](https://travis-ci.org/intel/camera-streaming-daemon.svg?branch=master)](https://travis-ci.org/intel/camera-streaming-daemon)
-<!-- <a href="https://scan.coverity.com/projects/01org-camera-streaming-daemon"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/12056/badge.svg"/></a> -->
+[![Build Status](https://travis-ci.org/intel/camera-streaming-daemon.svg?branch=master)](https://travis-ci.org/intel/camera-streaming-daemon) <a href="https://scan.coverity.com/projects/01org-camera-streaming-daemon"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/12056/badge.svg"/></a>
 
 The *Camera Streaming Daemon* (CSD) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/).
 

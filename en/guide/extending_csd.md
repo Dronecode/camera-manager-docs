@@ -1,6 +1,72 @@
 # Extending Camera Streaming Daemon
 
-## Create a Custom Video Stream
+## Create a Custom Camera Device
+
+Camera-Streaming-Daemon has native support for auto detection of video cameras exported as Video4Linux(V4L2) devices. This covers most of regular Linux cameras, but there are some cameras that don't have V4L2 support or cases where user wants to set very specific parameters or do custom post-processing in video before exporting.
+
+For these use cases, it is possible to create a custom CameraDevice class, representing a single custom camera device.
+CameraServer class keeps a list of all created CameraComponents, each one holding a single available CameraDevice. These CameraDevice objects are used by CameraComponent class for camera control and ImageCapture and VideoStream classes to perform the image capture and streaming.
+
+[CameraDeviceGazebo](https://github.com/intel/camera-streaming-daemon/blob/master/src/CameraDeviceGazebo.cpp) is an example of a custom CameraDevice. We will explore it in order to learn all the steps necessary to add new custom CameraDevice in Camera-Streaming-Daemon.
+
+### CameraDevice
+
+CameraDevice is the abstract base class for all camera devices.
+
+```cpp
+class CameraDevice {
+```
+Every CameraDevice is identified by a unique string. For V4L2 class of camera devices, its the device node videox (For example video0 ). For Gazebo, its the topic on which the camera frames are advertised.
+
+Based on how the camera frames can be read, there are two types of camera devices.
+- First is the camera device that supports gstreamer source element. The gst source element for such camera devices can be plugged in any gstreamer pipeline to implement the features like image capture, video streaming etc.
+- Second is the camera device that does not support gstreamer source element. Such type of class must implement the read function to return camera frame buffers. Gstreamer pipeline with appsrc element is created for such devices. The appsrc element is fed with frames returned by read function.
+
+### CameraParameters
+TODO : Description
+
+#### 1. Extend CameraDevice Class
+TODO : Description
+
+Example: CameraDeviceGazebo is the class that extends CameraDevice class.
+
+```cpp
+class CameraDeviceGazebo final : public CameraDevice {
+```
+TODO : Details on Gazebo class
+
+#### 2. Detect Camera Device
+TODO : Description
+
+```cpp
+// prepare the list of cameras in the system
+int CameraServer::detectCamera(ConfFile &conf)
+```
+Example: For Gazebo CameraDevice
+
+```cpp
+int CameraServer::detect_devices_gazebo(ConfFile &conf, std::vector<CameraComponent *> &camList)
+```
+
+#### 3. Instantiate Camera Device
+TODO : Description
+
+```cpp
+std::shared_ptr<CameraDevice> CameraComponent::create_camera_device(std::string camdev_name)
+```
+Example: For Gazebo CameraDevice
+
+```cpp
+    } else if (camdev_name.find("camera/image") != std::string::npos) {
+        log_debug("Gazebo device : %s", camdev_name.c_str());
+#ifdef ENABLE_GAZEBO
+        return std::make_shared<CameraDeviceGazebo>(camdev_name);
+```
+
+#### 4. Declare Camera Parameters
+TODO:Desription
+
+## Create a Custom RTSP Video Stream
 
 Camera-Streaming-Daemon has native support for auto detection of video cameras exported as Video4Linux(V4L2) devices. This covers most of regular Linux cameras, but there are some cameras that don't have V4L2 support or cases where user wants to set very specific parameters or do custom post-processing in video before exporting.
 

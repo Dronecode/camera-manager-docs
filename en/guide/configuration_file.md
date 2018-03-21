@@ -2,11 +2,11 @@
 
 CSD loads a configuration file with custom options/settings when it is started.
 
-> **Tip** The [samples/files](https://github.com/intel/camera-streaming-daemon/tree/master/samples/files) directory contains sample configuration files that you can use for Ubuntu, Aero and other platforms. 
+> **Tip** The [samples/config](https://github.com/intel/camera-streaming-daemon/tree/master/samples/config) directory contains sample configuration files that you can use for Ubuntu, Aero and other platforms. 
 
 By default CSD will look for a configuration file in **/etc/csd/main.conf**. You can over-ride this file location using the `CSD_CONF_FILE` environment variable or with the `-c` switch when starting CSD.
 
-The headings below explain the structure and main sections of the configuration file (see also [samples/files/config.sample](https://github.com/intel/camera-streaming-daemon/blob/master/samples/files/config.sample)).
+The headings below explain the structure and main sections of the configuration file (see also [samples/config/config.sample](https://github.com/intel/camera-streaming-daemon/blob/master/samples/config/config.sample)).
 
 
 ## File Structure
@@ -53,10 +53,10 @@ Key | Description | Default
 -- | --- | ---
 `blacklist` | Comma separated list of `/dev/video` devices that should not be exported (for RTSP or MAVLink). For example, if the video streams from cameras `/dev/video123` and `/dev/video456` could not be exported you would set: `blacklist = video123,video456`.| <empty>
 
-Example:
+Example (Aero):
 ```
 [v4l2]
-blacklist=video10
+blacklist=video0,video1,video3,video4,video5,video6,video7,video8,video9,video10,video11,video12
 ```
 
 > **Note** V4L2 creates multiple device "nodes" for each camera device (these are suitable for different purposes). The `blacklist` key is used to ignore additional nodes, so that CSD only creates a single interface for each camera.
@@ -71,13 +71,13 @@ Key | Description | Default
 `rtsp_server_addr` | IP address or hostname of the interface where the RTSP server is running. This is the address that will be used by the client to make the RTSP request. | 0.0.0.0
 `system_id` | System ID of the CSD to be used in MAVLink communications. This should typically match the ID of the connected autopilot (i.e. the CSD/connected cameras are considered MAVLink *components* of the autopilot *system*). | 42
 
-Example (for Aero):
+Example (for Ubuntu):
 ```
 [mavlink]
-port=80550
+port=14550
 broadcast_addr=127.0.0.255
 rtsp_server_addr=127.0.0.1
-system_id=2
+system_id=1
 ```
 
 > **Note** There is no `component-id` key because these IDs are auto-allocated by CSD (starting from 
@@ -91,36 +91,22 @@ Key | Description | Default
 
 > **Note** CSD needs to be able to supply URI locations of [Camera Definition Files](../guide/camera_definition_file.md) for attached cameras. CSD determines the URI for each camera using the mappings in this section.
 
-Example: 
-<!-- 
-examples below need to be updated once files are updated:
-https://github.com/intel/camera-streaming-daemon/issues/139
-https://github.com/intel/camera-streaming-daemon/issues/144
--->
-
-Gazebo
+Example (Gazebo): 
 ```
 [uri]
-video0=http://127.0.0.1/camera-def-R200rgb.xml
-video1=http://127.0.0.1/camera-def.xml
-gazebo=http://127.0.0.1/camera-def-R200rgb.xml
+gazebo=http://127.0.0.1:8000/camera-def-gazebo.xml
 ```
 
-Aero
+Example (Aero):
 ```
 [uri]
 video13=http://192.168.8.1:8000/camera-def-rs-rgb.xml
-video1=http://127.0.0.1/camera-def.xml
-video02=dummy
 ```
 
-Ubuntu
+Example (Ubuntu):
 ```
 [uri]
-video0=http://127.0.0.1/camera-def-R200rgb.xml
-video1=http://127.0.0.1/camera-def.xml
-video02=dummy
-gazebo=http://127.0.0.1/camera-def-R200rgb.xml
+video0=http://127.0.0.1:8000/camera-def-uvc.xml
 ```
 
 ### [imgcap]

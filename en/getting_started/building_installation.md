@@ -154,10 +154,10 @@ The *csd* executable will be created in the root of your CSD source tree (along 
 
 The line below shows how to start CSD, specifying a [CSD Configuration File](../guide/configuration_file.md) (in this case the Ubuntu **.conf** file in the source tree):
 ```
-./csd -c samples/files/ubuntu.conf
+./csd -c samples/config/ubuntu.conf
 ```
 
-> **Tip** The [samples/files](https://github.com/intel/camera-streaming-daemon/tree/master/samples/files) directory contains sample [configuration files](../guide/configuration_file.md) that you can use to set up CSD for use on Ubuntu, Aero and other platforms. To use a sample file, copy it to **/etc/csd/main.conf**, specify it in the `CSD_CONF_FILE` environment variable, or set the `-c` switch when starting CSD.
+> **Tip** The [samples/config](https://github.com/intel/camera-streaming-daemon/tree/master/samples/config) directory contains sample [configuration files](../guide/configuration_file.md) that you can use to set up CSD for use on Ubuntu, Aero and other platforms. To use a sample file, copy it to **/etc/csd/main.conf**, specify it in the `CSD_CONF_FILE` environment variable, or set the `-c` switch when starting CSD.
 
 Other command line options can be displayed using the `-h` flag:
 ```sh

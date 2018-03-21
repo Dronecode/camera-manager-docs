@@ -36,7 +36,7 @@ This test verifies what cameras CSD has detected, what streams were created, and
 Simply run CSD with verbose logging (via the `-v` flag). The example below shows the console output generated on a Ubuntu system with an integrated webcam:
 
 ```
-$ ./csd -v -c samples/files/ubuntu.conf
+$ ./csd -v -c samples/config/ubuntu.conf
 
 ConfFile: Adding section 'gstreamer'
 ConfFile: Adding section 'v4l2'

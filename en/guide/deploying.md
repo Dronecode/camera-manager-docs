@@ -21,14 +21,13 @@ TBD.
 
 ## Deploy CSD to Drone
 
-
 The following files must be present on the target platform (in addition to the CSD dependencies):
 
 File | Source File | Destination File
 --- | ---
 CSD binary | **/csd** (generated in root) | **/usr/bin/csd**
 [Auto-start definition](../guide/autostart.md) | **/csd.system** (generated in root) | **/lib/system/system/csd.system**
-[CSD configuration file](../guide/configuration_file.md) for platform | [/samples/files/](https://github.com/intel/camera-streaming-daemon/tree/master/samples/files)`<your_system>`.conf | **/etc/csd/main.conf**
+[CSD configuration file](../guide/configuration_file.md) for platform | [/samples/config/](https://github.com/intel/camera-streaming-daemon/tree/master/samples/config)`<your_system>`.conf | **/etc/csd/main.conf**
 
 To deploy CSD to a companion computer using *scp*:
 
@@ -38,7 +37,7 @@ To deploy CSD to a companion computer using *scp*:
    ```
    where:
    * `ip-addr` is IP address of the drone on the network (check using *ifconfig*) and `uname` is a user name with write privileges (system dependent).
-   
+
    > **Note** The configuration and autostart files typically do not change and rarely need to be updated. If required you can use the same approach as above to copy them. 
 
 1. Reboot Computer (to restart CSD on boot)

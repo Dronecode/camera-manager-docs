@@ -20,7 +20,7 @@ This test validates RTSP and UDP stream discovery. It outputs all RTSP streams b
 To run this test app:
 1. Start the CSD for your platform:
    ```
-   ./csd -c samples/files/ubuntu.conf
+   ./csd -c samples/config/ubuntu.conf
    ```
    > **Tip** Use the [CSD Configuration File](../guide/configuration_file.md) for your platform (above we use the Ubuntu configuration).
    
@@ -44,7 +44,7 @@ This is an interactive test of MAVLink stream publishing. The available streams 
 To run this app:
 1. Start the CSD for your platform:
    ```
-   ./csd -c samples/files/ubuntu.conf
+   ./csd -c ssamples/config/ubuntu.conf
    ```
    > **Tip** Use the [CSD Configuration File](../guide/configuration_file.md) for your platform (above we use the Ubuntu configuration).
 1. In a separate terminal (or on another computer connected to the target drone on the same network) run the test app:
@@ -88,7 +88,7 @@ To test it:
 
 1. Run the example using configuration for your platform:
    ```
-   ./test/test-custom-stream -c samples/files/ubuntu.conf
+   ./test/test-custom-stream -c samples/config/ubuntu.conf
    ```
    > **Tip** Use the [CSD Configuration File](../guide/configuration_file.md) for your platform (above we use the Ubuntu configuration).
 
@@ -113,7 +113,7 @@ This is a unit test for the camera parameters class. It verifies the storage and
 To run this app:
 1. Start the CSD for your platform:
    ```
-   ./csd -c samples/files/ubuntu.conf
+   ./csd -c samples/config/ubuntu.conf
    ```
    > **Tip** Use the [CSD Configuration File](../guide/configuration_file.md) for your platform (above we use the Ubuntu configuration).
 1. In a separate terminal (or on another computer connected to the target drone on the same network) run the test app:

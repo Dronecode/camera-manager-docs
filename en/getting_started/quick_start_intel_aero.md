@@ -55,9 +55,9 @@ To deploy CSD to Aero:
 
 1. Reboot Aero (Aero starts CSD on boot)
 
-> **Note** The Aero configuration file ([aero.conf](https://github.com/intel/camera-streaming-daemon/blob/master/samples/files/aero.conf)) and [autostart file](../guide/autostart.md) (*csd.service*) typically do not change or need to be updated. If required, you could do so using the following commands:
+> **Note** The Aero configuration file ([aero.conf](https://github.com/intel/camera-streaming-daemon/blob/master/samples/config/aero.conf)) and [autostart file](../guide/autostart.md) (*csd.service*) typically do not change or need to be updated. If required, you could do so using the following commands:
   ```
-  scp samples/files/aero.conf uname@ip-addr:/etc/csd/main.conf
+  scp samples/config/aero.conf uname@ip-addr:/etc/csd/main.conf
   scp csd.system uname@ip-addr:/lib/system/system/csd.system
   ```
   

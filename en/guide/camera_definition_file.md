@@ -25,9 +25,9 @@ Often the computer that is hosting CSD also serves the *Camera Definition Files*
 To run *SimpleHTTPServer*:
 
 1. Open a terminal in the directory that you want to serve.
-2. Enter the following command to start the server on port 8080 (or specify another port)
+1. Enter the following command to start the server on the default port (8000):
    ```
-   python -m SimpleHTTPServer 8080
+   python -m SimpleHTTPServer
    ```
    > **Note** Above uses Python 2.7. If you prefer Python 3, instead enter:
      ```
@@ -37,11 +37,11 @@ To run *SimpleHTTPServer*:
 Assuming the directory contained a file **camera-def.xml** it would now be accessible:
 * On the serving computer: 
   ```
-  http://127.0.0.1:8080/camera-def.xml
+  http://127.0.0.1:8000/camera-def.xml
   ```
 * On the network (the `<drone_ip>` can be obtained using *ifconfig*):
   ```
-  http://<drone_ip>:8080/camera-def.xml
+  http://<drone_ip>:8000/camera-def.xml
   ```
 
 
@@ -58,8 +58,8 @@ The fragments below show typical mappings for Aero and Ubuntu:
 * Ubuntu
   ```
   [uri]
-  video0=http://127.0.0.1/camera-def-R200rgb.xml
-  video1=http://127.0.0.1/camera-def.xml
+  video0=http://127.0.0.1:8000/camera-def-R200rgb.xml
+  video1=http://127.0.0.1:8000/camera-def.xml
   ```
 
 > **Note** The "Aero URI" host is the address of Aero on the network. The Ubuntu address can be "localhost" (internal) because when testing both CSD and clients (e.g. *QGroundControl*) are typically being run on the same computer and can see this address.

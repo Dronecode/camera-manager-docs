@@ -99,9 +99,9 @@ This fetches all the sources for the project (including the [MAVLink C library](
 
 Before running CSD with MAVLink enabled *on Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
 1. Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
-1. Enter the following command to start the server on port 8080:
+1. Enter the following command to start the server on the default port (8000):
    ```
-   python -m SimpleHTTPServer 8080
+   python -m SimpleHTTPServer
    ```
 
 > **Tip** The [Camera Definition Files](../guide/camera_definition_file.md) is only needed if you are running CSD with MAVLink enabled. 

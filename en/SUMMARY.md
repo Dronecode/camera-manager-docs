@@ -11,7 +11,7 @@
   * [Manual Tests](test/manual_tests.md)
   * [Test Apps](test/test_apps.md)
 * [Guide](guide/overview.md)
-  * [Basic Flow](guide/basic_flow.md)
+  * [Using RTSP](guide/rtsp.md)
   * [CSD Configuration File](guide/configuration_file.md)
   * [Camera Definition File](guide/camera_definition_file.md)
   * [Autostart CSD](guide/autostart.md)

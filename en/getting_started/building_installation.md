@@ -95,16 +95,19 @@ This fetches all the sources for the project (including the [MAVLink C library](
   git clone https://github.com/intel/camera-streaming-daemon.git --recursive
   ```
 
-### Serve Camera Definition Files 
+### Serve Camera Definition Files
 
-Before running CSD with MAVLink enabled on *Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
+Before running CSD with MAVLink enabled *on Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
 1. Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
 1. Enter the following command to start the server on port 8080:
    ```
    python -m SimpleHTTPServer 8080
    ```
 
-> **Tip** This step is not needed if you are running CSD without MAVLink enabled, or on Aero. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
+> **Tip** The [Camera Definition Files](../guide/camera_definition_file.md) is only needed if you are running CSD with MAVLink enabled. 
+
+<span></span>
+> **Note** Here we chose to serve the the file from Ubuntu. In fact, the file can be hosted anywhere that is accessible to clients (e.g. QGroundControl, Dronecode SDK), provided you update the [CSD Configuration File](../guide/configuration_file.md) with its URI. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
 
 
 ## Configure

@@ -1,8 +1,10 @@
 # Camera Definition File
 
-As defined in the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html), a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) may be used to specify information about a camera's advanced settings and parameters. If requested, a camera can supply the URI for its definition file, which can then be downloaded and parsed by the client.
+As defined in the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html), a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) may be used to specify information about a camera's advanced settings and parameters. A camera will supply the URI for its definition file on request (if one has been defined), so that the file can be downloaded and parsed by the client.
 
-CSD needs to be able to supply the URI locations for attached camera's definition files (if they are available/exist). The computer running CSD may also need to *serve* the definition files so that they can be downloaded by clients running on the same MAVLink network.
+The *Camera Definition Files* can be hosted anywhere that is accessible to clients (including *QGroundControl* and Dronecode SDK apps). Often the files are served from the computer running CSD.
+
+CSD is able to supply the URIs for attached cameras using a mapping given in the [CSD Configuration File > \[uri section\]](../guide/configuration_file.md#uri).
 
 This topic explains how to:
 * Serve the definition files on the CSD companion computer.
@@ -13,7 +15,7 @@ This topic explains how to:
 
 ## Hosting Camera Definition Files
 
-Usually the computer that is hosting CSD should also serve the *Camera Definition Files* (to ensure that they are accessible to clients running on the same network). We recommend using the Python *SimpleHTTPServer* because it is lightweight, and because the fact that it is present in many Linux distributions (as part of Python) means that it requires no additional setup.
+Often the computer that is hosting CSD also serves the *Camera Definition Files*. If this is needed, we recommend using the Python *SimpleHTTPServer* because it is lightweight, and because the fact that it is present in many Linux distributions (as part of Python) means that it requires no additional setup.
 
 > **Note** Intel Aero uses *SimpleHTTPServer* by default (so this does not need to be set up on Aero).
 

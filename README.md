@@ -1,6 +1,6 @@
 # Camera Streaming Daemon (Documentation Source Code)
 
-The *Camera Streaming Daemon* (CSD) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/) via MAVLink and RTSP. Documentation for the CSD is available here: [TBD]
+The *Camera Streaming Daemon* (CSD) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/) via MAVLink and RTSP. Documentation for the CSD is available here: [TEMP](https://hamishwillee.gitbooks.io/camera-streaming-daemon/content/en/)
 
 This repository contains the *source code for the documentation*.
 

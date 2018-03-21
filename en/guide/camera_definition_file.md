@@ -58,8 +58,7 @@ The fragments below show typical mappings for Aero and Ubuntu:
 * Ubuntu
   ```
   [uri]
-  video0=http://127.0.0.1:8000/camera-def-R200rgb.xml
-  video1=http://127.0.0.1:8000/camera-def.xml
+  video0=http://127.0.0.1:8000/camera-def-uvc.xml
   ```
 
 > **Note** The "Aero URI" host is the address of Aero on the network. The Ubuntu address can be "localhost" (internal) because when testing both CSD and clients (e.g. *QGroundControl*) are typically being run on the same computer and can see this address.

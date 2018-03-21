@@ -16,7 +16,7 @@ CSD supports the following key features:
 * Automatically attaches [compatible cameras](#supported_cameras) connected to the Linux computer when it is started.
 * RTSP video streaming from *all* connected cameras (for consumption by GCS or other video players).
 * RTSP video stream advertising/discovery using Avahi.
-* [MAVLink Camera Protocol](#mavlink_support) support for up to 5 cameras, enabling video and image capture and storage, and querying/setting camera options.
+* [MAVLink Camera Protocol](#mavlink_support) support for up to 5 cameras, enabling image capture and storage, and querying/setting camera options. <!-- but not yet video capture - Mar 2018 -->
 * Gazebo simulated camera backend (so you can view video streams from within a simulated environment)!
 * Configurable back-end that can be extended to interface with new types of cameras and new front-end protocols.
 
@@ -37,7 +37,7 @@ Compile-time configuration is provided through [build-configuration flags](../ge
 
 Run-time configuration is provided by the [CSD Configuration File](../guide/configuration_file.md). Among other things, this allows users to set: location where captured images will be stored, devices that will not be connected, and settings required for defining the MAVLink node.
 
-Advanced configuration information about individual cameras is specified in [Camera Definition Files](CDF). While not strictly part of CSD, these files are referenced in the [CSD Configuration File](../guide/configuration_file.md#uri) (and may be served on the same computer as CSD).
+Advanced configuration information about individual cameras is specified in [Camera Definition Files](../guide/camera_definition_file.md). While not strictly part of CSD, these files are referenced in the [CSD Configuration File](../guide/configuration_file.md#uri) (and may be served on the same computer as CSD).
 
 
 ## MAVLink Camera Protocol Implementation {#mavlink_support}
@@ -46,7 +46,7 @@ CSD implements the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/came
 
 The MAVLink properties of CSD are specified in the *CSD Configuration File*:
 * The [\[mavlink\]](../guide/configuration_file.md#mavlink) section is used to specify the MAVLink destination UDP port, the broadcast address for heartbeat messages, and the system id (which should be set to match the autopilot).
-* The [\[uri\]](../guide/configuration_file.md#uri) section specifies the device to URI mapping for [Camera Definition Files](TBD).
+* The [\[uri\]](../guide/configuration_file.md#uri) section specifies the device to URI mapping for [Camera Definition File](../guide/camera_definition_file.md).
 
 Component IDs for each camera are allocated automatically and sequentially from [MAV_COMP_ID_CAMERA2](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA2) to [MAV_COMP_ID_CAMERA6](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA6) (inclusive) as cameras are connected (once all component ids are allocated further cameras are not addressable).
 

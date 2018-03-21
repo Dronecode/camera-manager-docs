@@ -28,8 +28,14 @@ This Quickstart shows how to build CSD on Ubuntu LTS 16.04 (with support for MAV
    ```
    make
    ```
-1. Attach [CSD-compatible cameras](../guide/overview.md#supported_cameras) to Ubuntu.
-1. Run CSD specifying the Ubuntu [configuration file](../getting_started/building_installation.md#configuration-file-runtime).
+1. Attach [CSD-compatible cameras](../guide/overview.md#supported_cameras) to Ubuntu
+1. Serve the sample [Camera Definition Files](../guide/camera_definition_file.md):
+   * Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+   * Enter the following command to start the server on port 8080:
+     ```
+     python -m SimpleHTTPServer 8080
+     ```
+1. Run CSD specifying Ubuntu [configuration file](../getting_started/building_installation.md#configuration-file-runtime).
    ```
    ./csd -c samples/files/ubuntu.conf
    ```

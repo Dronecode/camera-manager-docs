@@ -12,7 +12,9 @@
         "toolbar@git+https://github.com/hamishwillee/gitbook-plugin-toolbar.git",
         "validate-links",
         "theme-dronecode@git+https://github.com/dronecode/theme-dronecode.git",
-        "-versions"
+        "-versions",
+        "-mermaid",
+        "-stub-out-blocks@git+https://github.com/hamishwillee/gitbook-plugin-stub-out-blocks.git"
     ],
     "variables": {
       "github_branch": "develop"

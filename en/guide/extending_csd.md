@@ -16,27 +16,46 @@ CameraDevice is the abstract base class for all camera devices.
 ```cpp
 class CameraDevice {
 ```
-Every CameraDevice is identified by a unique string. For V4L2 class of camera devices, its the device node videox (For example video0 ). For Gazebo, its the topic on which the camera frames are advertised.
+Every CameraDevice is identified by a unique string. For V4L2 class of camera devices, its the device node videox (For example video0 ). For Gazebo, its the string "gazebo".
 
 Based on how the camera frames can be read, there are two types of camera devices.
 - First is the camera device that supports gstreamer source element. The gst source element for such camera devices can be plugged in any gstreamer pipeline to implement the features like image capture, video streaming etc.
 - Second is the camera device that does not support gstreamer source element. Such type of class must implement the read function to return camera frame buffers. Gstreamer pipeline with appsrc element is created for such devices. The appsrc element is fed with frames returned by read function.
 
 ### CameraParameters
-TODO : Description
+CameraParameters is the class to store and retrieve parameters and its value. Camera parameter is identified by a string and a corresponding integer ID. Parameter can be of any defined [types](http://mavlink.org/messages/common#MAV_PARAM_EXT_TYPE_UINT8). The parameter name, ID, type and its value(converted as string) is stored in the map data structure in the CameraParameters class. Few commonly used camera parameters are defined with name, ID and supported values. Nevertheless, developer can declare custom parameters as per their requirement.
 
+```cpp
+class CameraParameters {
+```
 #### 1. Extend CameraDevice Class
-TODO : Description
+To add support for new type of camera device in CSD, a custom class need to be derived from CameraDevice base class.
 
 Example: CameraDeviceGazebo is the class that extends CameraDevice class.
 
 ```cpp
 class CameraDeviceGazebo final : public CameraDevice {
 ```
-TODO : Details on Gazebo class
+CameraDevice has some pure virtual functions (runtime binding) that must be implemented by the child class. Other methods can also be overloaded to provide the functionality.
 
+Example : Details on Gazebo class
+
+```cpp
+class CameraDeviceGazebo final : public CameraDevice {
+public:
+    CameraDeviceGazebo(std::string device);
+    ~CameraDeviceGazebo();
+    std::string getDeviceId();
+    int getInfo(struct CameraInfo &camInfo);
+    bool isGstV4l2Src();
+    int init(CameraParameters &camParam);
+    int uninit();
+    int resetParams(CameraParameters &camParam);
+    int setParam(CameraParameters &camParam, std::string param, const char *param_value,
+                 size_t value_size, int param_type);
+```
 #### 2. Detect Camera Device
-TODO : Description
+After having added a custom CameraDevice class, there has be a logic in place to detect the custom camera device. A CameraComponent will be created for every camera device detected. V4L2 camera devices are detected by scanning the linux device nodes /dev/video*. Gazebo camera is detected based on --enable-gazebo compile time flag. Configurations associated with the camera device is read from the conf file.
 
 ```cpp
 // prepare the list of cameras in the system
@@ -49,7 +68,7 @@ int CameraServer::detect_devices_gazebo(ConfFile &conf, std::vector<CameraCompon
 ```
 
 #### 3. Instantiate Camera Device
-TODO : Description
+The CameraComponent instantiates and owns the custom CameraDevice object. The instantiation of the object is based on the string that identifies the camera device.
 
 ```cpp
 std::shared_ptr<CameraDevice> CameraComponent::create_camera_device(std::string camdev_name)
@@ -64,7 +83,37 @@ Example: For Gazebo CameraDevice
 ```
 
 #### 4. Declare Camera Parameters
-TODO:Desription
+Parameters supported by the CameraDevice need to be declared by the custom CameraDevice. Either pre-defined parameter strings and IDs can be used or newer ones can be defined. Setting or these parameters and resetting of all the parameters need to be handled by the custom CameraDevice.
+
+Example: For Gazebo CameraDevice
+
+```cpp
+int CameraDeviceGazebo::init(CameraParameters &camParam)
+{
+    camParam.setParameterIdType(CameraParameters::CAMERA_MODE,
+                                CameraParameters::PARAM_ID_CAMERA_MODE,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter(CameraParameters::CAMERA_MODE,
+                          (uint32_t)CameraParameters::ID_CAMERA_MODE_VIDEO);
+    camParam.setParameterIdType(PARAMETER_CUSTOM_UINT8, ID_PARAMETER_CUSTOM_UINT8,
+                                CameraParameters::PARAM_TYPE_UINT8);
+    camParam.setParameter(PARAMETER_CUSTOM_UINT8, (uint8_t)50);
+    camParam.setParameterIdType(PARAMETER_CUSTOM_UINT32, ID_PARAMETER_CUSTOM_UINT32,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter(PARAMETER_CUSTOM_UINT32, (uint32_t)50);
+    camParam.setParameterIdType(PARAMETER_CUSTOM_INT32, ID_PARAMETER_CUSTOM_INT32,
+                                CameraParameters::PARAM_TYPE_INT32);
+    camParam.setParameter(PARAMETER_CUSTOM_INT32, (int32_t)-10);
+    camParam.setParameterIdType(PARAMETER_CUSTOM_REAL32, ID_PARAMETER_CUSTOM_REAL32,
+                                CameraParameters::PARAM_TYPE_REAL32);
+    camParam.setParameter(PARAMETER_CUSTOM_REAL32, (float)0);
+    camParam.setParameterIdType(PARAMETER_CUSTOM_ENUM, ID_PARAMETER_CUSTOM_ENUM,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter(PARAMETER_CUSTOM_ENUM, (uint32_t)0);
+
+    return 0;
+}
+```
 
 ## Create a Custom RTSP Video Stream
 

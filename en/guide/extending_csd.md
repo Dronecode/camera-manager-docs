@@ -1,47 +1,25 @@
 # Extending Camera Streaming Daemon
 
-## Create a Custom Camera Device
+Camera-Streaming-Daemon is designed and developed to be fully featured and support multiple types of cameras. There will still be requirement to support new type of camera or to customize features. By [design](../guide/architecture.md), CSD can be extended and customized.
 
-Camera-Streaming-Daemon has native support for auto detection of video cameras exported as Video4Linux(V4L2) devices. This covers most of regular Linux cameras, but there are some cameras that don't have V4L2 support or cases where user wants to set very specific parameters or do custom post-processing in video before exporting.
+## List of Extensible Features :
 
-For these use cases, it is possible to create a custom CameraDevice class, representing a single custom camera device.
-CameraServer class keeps a list of all created CameraComponents, each one holding a single available CameraDevice. These CameraDevice objects are used by CameraComponent class for camera control and ImageCapture and VideoStream classes to perform the image capture and streaming.
+1. **`Camera Device`** : Camera-Streaming-Daemon has native support for auto detection of cameras that support the Video4Linux (V4L2) API. Details on cameras supported by CSD can be found [here](../guide/overview.md#supported-cameras-supported_cameras). This covers most of the regular Linux cameras but there are also many other cameras that are currently not supported. The support for any type of camera can be added in CSD. Also, any type of configurable camera parameter can be declared and exported to client (GCS).
+2. **`Image Capture`** : CSD supports image capture using gstreamer. Developer can implement new type of image capture (eg- image capture using opencv instead of gstreamer).
+3. **`Video Capture`** : CSD supports video capture using gstreamer. Developer can implement new type of video capture (eg - video capture using multimedia framework other than gstreamer).
+4. **`Video Streaming`** : CSD supports UDP and RTSP video streaming protocols using gstreamer. Developer can implement new type of video streaming (eg - HLS protocol).
 
-[CameraDeviceGazebo](https://github.com/intel/camera-streaming-daemon/blob/master/src/CameraDeviceGazebo.cpp) is an example of a custom CameraDevice. We will explore it in order to learn all the steps necessary to add new custom CameraDevice in Camera-Streaming-Daemon.
+## Support Custom Camera Device
 
-### CameraDevice
+Steps to add support for a new custom camera device are detailed below.
 
-CameraDevice is the abstract base class for all camera devices.
-
-```cpp
-class CameraDevice {
-```
-Every CameraDevice is identified by a unique string. For V4L2 class of camera devices, its the device node videox (For example video0 ). For Gazebo, its the string "gazebo".
-
-Based on how the camera frames can be read, there are two types of camera devices.
-- First is the camera device that supports gstreamer source element. The gst source element for such camera devices can be plugged in any gstreamer pipeline to implement the features like image capture, video streaming etc.
-- Second is the camera device that does not support gstreamer source element. Such type of class must implement the read function to return camera frame buffers. Gstreamer pipeline with appsrc element is created for such devices. The appsrc element is fed with frames returned by read function.
-
-### CameraParameters
-CameraParameters is the class to store and retrieve parameters and its value. Camera parameter is identified by a string and a corresponding integer ID. Parameter can be of any defined [types](http://mavlink.org/messages/common#MAV_PARAM_EXT_TYPE_UINT8). The parameter name, ID, type and its value(converted as string) is stored in the map data structure in the CameraParameters class. Few commonly used camera parameters are defined with name, ID and supported values. Nevertheless, developer can declare custom parameters as per their requirement.
-
-```cpp
-class CameraParameters {
-```
 #### 1. Extend CameraDevice Class
-To add support for new type of camera device in CSD, a custom class need to be derived from CameraDevice base class.
+To add support for new type of camera device in CSD, a custom class must be derived from `CameraDevice` base class. An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md). The class `CameraDeviceCustom` represents a custom type of camera device.
 
-Example: CameraDeviceGazebo is the class that extends CameraDevice class.
-
-```cpp
-class CameraDeviceGazebo final : public CameraDevice {
-```
-CameraDevice has some pure virtual functions (runtime binding) that must be implemented by the child class. Other methods can also be overloaded to provide the functionality.
-
-Example : Details on Gazebo class
+**Action** : `CameraDeviceCustom` must implement the pure virtual functions of the base class `CameraDevice`
 
 ```cpp
-class CameraDeviceGazebo final : public CameraDevice {
+class CameraDeviceCustom final : public CameraDevice {
 public:
     CameraDeviceGazebo(std::string device);
     ~CameraDeviceGazebo();
@@ -54,65 +32,66 @@ public:
     int setParam(CameraParameters &camParam, std::string param, const char *param_value,
                  size_t value_size, int param_type);
 ```
-#### 2. Detect Camera Device
-After having added a custom CameraDevice class, there has be a logic in place to detect the custom camera device. A CameraComponent will be created for every camera device detected. V4L2 camera devices are detected by scanning the linux device nodes /dev/video*. Gazebo camera is detected based on --enable-gazebo compile time flag. Configurations associated with the camera device is read from the conf file.
+
+**Action** : `CameraDeviceCustom` may overload other methods to provide the functionality.
+
+The configurable parameters of the custom camera device can be exported to the client(GCS) for control. Setting of these parameters and resetting of all the parameters must be handled by the `CameraDeviceCustom` class.
+
+**Action** : `CameraDeviceCustom` must declare the parameter name(string), ID(int) and type(enum) . Also set the default value of the parameter 
 
 ```cpp
-// prepare the list of cameras in the system
-int CameraServer::detectCamera(ConfFile &conf)
-```
-Example: For Gazebo CameraDevice
-
-```cpp
-int CameraServer::detect_devices_gazebo(ConfFile &conf, std::vector<CameraComponent *> &camList)
-```
-
-#### 3. Instantiate Camera Device
-The CameraComponent instantiates and owns the custom CameraDevice object. The instantiation of the object is based on the string that identifies the camera device.
-
-```cpp
-std::shared_ptr<CameraDevice> CameraComponent::create_camera_device(std::string camdev_name)
-```
-Example: For Gazebo CameraDevice
-
-```cpp
-    } else if (camdev_name.find("camera/image") != std::string::npos) {
-        log_debug("Gazebo device : %s", camdev_name.c_str());
-#ifdef ENABLE_GAZEBO
-        return std::make_shared<CameraDeviceGazebo>(camdev_name);
-```
-
-#### 4. Declare Camera Parameters
-Parameters supported by the CameraDevice need to be declared by the custom CameraDevice. Either pre-defined parameter strings and IDs can be used or newer ones can be defined. Setting or these parameters and resetting of all the parameters need to be handled by the custom CameraDevice.
-
-Example: For Gazebo CameraDevice
-
-```cpp
-int CameraDeviceGazebo::init(CameraParameters &camParam)
+int CameraDeviceCustom::init(CameraParameters &camParam)
 {
     camParam.setParameterIdType(CameraParameters::CAMERA_MODE,
                                 CameraParameters::PARAM_ID_CAMERA_MODE,
                                 CameraParameters::PARAM_TYPE_UINT32);
     camParam.setParameter(CameraParameters::CAMERA_MODE,
                           (uint32_t)CameraParameters::ID_CAMERA_MODE_VIDEO);
-    camParam.setParameterIdType(PARAMETER_CUSTOM_UINT8, ID_PARAMETER_CUSTOM_UINT8,
+    camParam.setParameterIdType("brightness", 101,
                                 CameraParameters::PARAM_TYPE_UINT8);
-    camParam.setParameter(PARAMETER_CUSTOM_UINT8, (uint8_t)50);
-    camParam.setParameterIdType(PARAMETER_CUSTOM_UINT32, ID_PARAMETER_CUSTOM_UINT32,
+    camParam.setParameter("brightness", (uint8_t)50);
+    camParam.setParameterIdType("contrast", 102,
                                 CameraParameters::PARAM_TYPE_UINT32);
-    camParam.setParameter(PARAMETER_CUSTOM_UINT32, (uint32_t)50);
-    camParam.setParameterIdType(PARAMETER_CUSTOM_INT32, ID_PARAMETER_CUSTOM_INT32,
+    camParam.setParameter("contrast", (uint32_t)50);
+    camParam.setParameterIdType("hue", 103,
                                 CameraParameters::PARAM_TYPE_INT32);
-    camParam.setParameter(PARAMETER_CUSTOM_INT32, (int32_t)-10);
-    camParam.setParameterIdType(PARAMETER_CUSTOM_REAL32, ID_PARAMETER_CUSTOM_REAL32,
+    camParam.setParameter("hue", (int32_t)-10);
+    camParam.setParameterIdType("zoom", 104,
                                 CameraParameters::PARAM_TYPE_REAL32);
-    camParam.setParameter(PARAMETER_CUSTOM_REAL32, (float)0);
-    camParam.setParameterIdType(PARAMETER_CUSTOM_ENUM, ID_PARAMETER_CUSTOM_ENUM,
+    camParam.setParameter("zoom", (float)0);
+    camParam.setParameterIdType("white_balance_mode", 105,
                                 CameraParameters::PARAM_TYPE_UINT32);
-    camParam.setParameter(PARAMETER_CUSTOM_ENUM, (uint32_t)0);
+    camParam.setParameter("white_balance_mode", (uint32_t)0);
 
     return 0;
 }
+```
+
+**Action** : The `CameraDeviceCustom` must handle setting of the parameters declared and resetting of all the parameters.
+
+#### 2. Detect Custom Camera Device
+There must be a logic to detect the custom camera device. For example V4L2 camera devices are detected by scanning the linux device nodes /dev/video* and Gazebo camera is detected based on --enable-gazebo compile time flag.
+
+**Action** : Implement function to detect the custom camera device
+
+```cpp
+int CameraServer::detect_devices_custom(ConfFile &conf, std::vector<CameraComponent *> &camList)
+```
+**Action** : Call the function `detect_devices_custom` from the function that prepares the list of cameras in the system
+
+```cpp
+// prepare the list of cameras in the system
+int CameraServer::detectCamera(ConfFile &conf)
+```
+
+#### 3. Instantiate Custom Camera Device
+After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The CameraComponent will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`
+
+**Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-streaming-daemon/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
+
+```cpp
+    } else if (camdev_name.find("camera/custom") != std::string::npos) {
+        return std::make_shared<CameraDeviceCustom>(camdev_name);
 ```
 
 ## Create a Custom RTSP Video Stream

@@ -5,7 +5,7 @@ The *Camera Streaming Daemon* (CSD) is [architected](../guide/architecture.md) s
 > **Tip** Out of the box CSD already [supports many cameras](../guide/overview.md#supported-cameras-supported_cameras) including most regular Linux cameras (those that use the Video4Linux API). It also provides access to camera features including image capture, video capture and UDP and RTSP video streaming via *GStreamer*. 
 
 ## Extensible Features
-
+ 
 Feature | Description
 --- | ---
 Custom Camera Devices/Parameters | CSD can be extended to support any (other) camera type and any configurable camera parameter can be declared and exported to a client (GCS).

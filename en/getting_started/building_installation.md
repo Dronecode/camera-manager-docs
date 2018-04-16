@@ -6,8 +6,7 @@ The build system follows a typical *configure > build > install cycle*. The [con
 
 > **Tip** We recommend you read this topic as it fully explains the build process. The *Quickstart* topics (see sidebar) provide additional instructions for setting up common configurations.
 
-<span id="dependencies"></span>
-## Prerequisites
+## Prerequisites {#dependencies}
 
 The CSD can be configured to enable/disable specific functionality at compile-time. As a result, some dependencies are only required in order to use specific features. 
 
@@ -47,16 +46,15 @@ sudo pip2 -q install -U future
 > **Note** GCC 5.4 and the C/C++ standard libraries are installed by default.
 
 
-<span id="avahi_deps"></span>
-### Avahi
+
+### Avahi {#avahi_deps}
 
 Run the following command to get the [Avahi](https://github.com/lathiat/avahi) dependencies:
 ```sh
 sudo apt-get install libavahi-client-dev libavahi-core-dev libavahi-glib-dev -y
 ```
 
-<span id="realsense_deps"></span>
-### RealSense 3D Camera
+### RealSense 3D Camera {#realsense_deps}
 
 Run the following command to get the [RealSense SDK 1](https://software.intel.com/sites/products/realsense/intro/getting_started.html) libraries:
 ```
@@ -73,8 +71,7 @@ sudo apt-get install librealsense-dev -y
 <span></span>
 > **Note** CSD only has access to this camera when it is **not being used** for optical flow or VIO)
 
-<span id="gazebo_deps"></span>
-### Gazebo
+### Gazebo {#gazebo_deps}
 
 The easiest way to set up Gazebo and the PX4 simulator to use the *PX4 Developer Guide* scripts: [Development Environment on Linux > jMAVSim/Gazebo Simulation](https://dev.px4.io/en/setup/dev_env_linux.html#jmavsimgazebo-simulation).
 
@@ -110,7 +107,7 @@ Before running CSD with MAVLink enabled *on Ubuntu*, you should start serving th
 > **Note** Here we chose to serve the the file from Ubuntu. In fact, the file can be hosted anywhere that is accessible to clients (e.g. QGroundControl, Dronecode SDK), provided you update the [CSD Configuration File](../guide/configuration_file.md) with its URI. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
 
 
-## Configure
+## Configure {#configure}
 
 Configuration allows you to specify the features that will be included when CSD is compiled (this step need only be done once).
 

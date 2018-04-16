@@ -1,22 +1,29 @@
 # Extending Camera Streaming Daemon
 
-Camera-Streaming-Daemon is designed and developed to be fully featured and support multiple types of cameras. There will still be requirement to support new type of camera or to customize features. By [design](../guide/architecture.md), CSD can be extended and customized.
+The *Camera Streaming Daemon* (CSD) is [architected](../guide/architecture.md) so that it can be extended to integrate with any type of camera (attached to the host OS) and expose any camera feature. This topic explains main steps for extending the different features. 
 
-## List of Extensible Features :
+> **Tip** Out of the box CSD already [supports many cameras](../guide/overview.md#supported-cameras-supported_cameras) including most regular Linux cameras (those that use the Video4Linux API). It also provides access to camera features including image capture, video capture and UDP and RTSP video streaming via *GStreamer*. 
 
-1. **`Camera Device`** : Camera-Streaming-Daemon has native support for auto detection of cameras that support the Video4Linux (V4L2) API. Details on cameras supported by CSD can be found [here](../guide/overview.md#supported-cameras-supported_cameras). This covers most of the regular Linux cameras but there are also many other cameras that are currently not supported. The support for any type of camera can be added in CSD. Also, any type of configurable camera parameter can be declared and exported to client (GCS).
-2. **`Image Capture`** : CSD supports image capture using gstreamer. Developer can implement new type of image capture (eg- image capture using opencv instead of gstreamer).
-3. **`Video Capture`** : CSD supports video capture using gstreamer. Developer can implement new type of video capture (eg - video capture using multimedia framework other than gstreamer).
-4. **`Video Streaming`** : CSD supports UDP and RTSP video streaming protocols using gstreamer. Developer can implement new type of video streaming (eg - HLS protocol).
+## Extensible Features
+
+Feature | Description
+--- | ---
+Custom Camera Devices/Parameters | CSD can be extended to support any (other) camera type and any configurable camera parameter can be declared and exported to a client (GCS).
+Image Capture | Developers can implement new types of image capture (for example, image capture using *OpenCV* instead of *GStreamer*).
+Video Capture | Developers can implement new types of video capture (for example, video capture using a multimedia framework other than *GStreamer*).
+Video Streaming | Developers can implement new types of video streaming (e.g. HLS protocol).
 
 ## Support Custom Camera Device
 
-Steps to add support for a new custom camera device are detailed below.
+In order to support a new type of camera a custom class must be derived from `CameraDevice`. In addition, code must be added to detect the new device type and to instantiate the new custom camera device when this happens. The sections below detail these steps.
 
-#### 1. Extend CameraDevice Class
-To add support for new type of camera device in CSD, a custom class must be derived from `CameraDevice` base class. An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md). The class `CameraDeviceCustom` represents a custom type of camera device.
+### 1. Extend CameraDevice Class
 
-**Action** : `CameraDeviceCustom` must implement the pure virtual functions of the base class `CameraDevice`
+To add support for new type of camera device in CSD, a custom class must be derived from `CameraDevice`. 
+An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md#class_diagram). 
+The class `CameraDeviceCustom` represents a custom type of camera device.
+
+**Action**: `CameraDeviceCustom` must implement the pure virtual functions of the base class `CameraDevice`. 
 
 ```cpp
 class CameraDeviceCustom final : public CameraDevice {
@@ -33,11 +40,11 @@ public:
                  size_t value_size, int param_type);
 ```
 
-**Action** : `CameraDeviceCustom` may overload other methods to provide the functionality.
+**Action**: `CameraDeviceCustom` may overload other methods to provide the functionality.
 
-The configurable parameters of the custom camera device can be exported to the client(GCS) for control. Setting of these parameters and resetting of all the parameters must be handled by the `CameraDeviceCustom` class.
+The configurable parameters of the custom camera device can be exported to the client (GCS) for control. Setting of these parameters and resetting of all the parameters must be handled by the `CameraDeviceCustom` class.
 
-**Action** : `CameraDeviceCustom` must declare the parameter name(string), ID(int) and type(enum) . Also set the default value of the parameter 
+**Action*: `CameraDeviceCustom` must declare the parameter name (string), ID (int) and type (enum). Also set the default value of the parameter.
 
 ```cpp
 int CameraDeviceCustom::init(CameraParameters &camParam)
@@ -67,25 +74,29 @@ int CameraDeviceCustom::init(CameraParameters &camParam)
 }
 ```
 
-**Action** : The `CameraDeviceCustom` must handle setting of the parameters declared and resetting of all the parameters.
+**Action**: The `CameraDeviceCustom` must handle setting and resetting of the declared parameters.
 
-#### 2. Detect Custom Camera Device
-There must be a logic to detect the custom camera device. For example V4L2 camera devices are detected by scanning the linux device nodes /dev/video* and Gazebo camera is detected based on --enable-gazebo compile time flag.
 
-**Action** : Implement function to detect the custom camera device
+### 2. Detect Custom Camera Device
+
+There must be a logic to detect the custom camera device.
+For example V4L2 camera devices are detected by scanning the Linux device nodes `/dev/video*` and Gazebo camera is detected based on [--enable-gazebo](../getting_started/building_installation.md#configure) compile time flag.
+
+**Action**: Implement function to detect the custom camera device.
 
 ```cpp
 int CameraServer::detect_devices_custom(ConfFile &conf, std::vector<CameraComponent *> &camList)
 ```
-**Action** : Call the function `detect_devices_custom` from the function that prepares the list of cameras in the system
+**Action**: Call the function `detect_devices_custom()` from the function that prepares the list of cameras in the system.
 
 ```cpp
 // prepare the list of cameras in the system
 int CameraServer::detectCamera(ConfFile &conf)
 ```
 
-#### 3. Instantiate Custom Camera Device
-After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The CameraComponent will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`
+### 3. Instantiate Custom Camera Device
+
+After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The `CameraComponent` will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`.
 
 **Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-streaming-daemon/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
 
@@ -94,30 +105,39 @@ After detection of the custom camera device, `CameraServer` will instantiate a `
         return std::make_shared<CameraDeviceCustom>(camdev_name);
 ```
 
-## Create a Custom RTSP Video Stream
+## Custom RTSP Video Stream
 
-Camera-Streaming-Daemon has native support for auto detection of video cameras exported as Video4Linux(V4L2) devices. This covers most of regular Linux cameras, but there are some cameras that don't have V4L2 support or cases where user wants to set very specific parameters or do custom post-processing in video before exporting.
+Developers might want to provide a custom RTSP video stream for cameras that don't have V4L2 support, where users need to set very specific parameters, or to do custom post-processing in video before exporting.
 
-For these use cases, it is possible to create a custom StreamBuilder class, creating custom Streams elements. 
-StreamManager class keeps a list of all created Stream elements, each one representing a single available video stream. These Stream objects are used by AvahiPublisher and RTSPServer classes to perform the advertisement and streaming.
+For these use cases, it is possible to create a custom `StreamBuilder` class, creating custom `Stream` elements. 
+The `StreamManager` class keeps a list of all created `Stream` elements, each one representing a single available video stream. 
+These `Stream` objects are used by `AvahiPublisher` and `RTSPServer` classes to perform the streaming and stream-advertising.
 
-There are two samples in [samples directory](https://github.com/01org/camera-streaming-daemon/tree/master/samples) using this approach, camera-sample-custom and camera-sample-realsense. We will explore camera-sample-custom in order to learn all steps necessary to create a custom video stream class in Camera-Streaming-Daemon
+There are two samples in [samples directory](https://github.com/01org/camera-streaming-daemon/tree/master/samples) using this approach, 
+**camera-sample-custom** and **camera-sample-realsense*. 
+We will explore **camera-sample-custom** in order to learn all steps necessary to create a CSD custom video stream class.
 
 ### Camera Sample Custom
 
-Camera Sample Custom adds two new classes to the daemon in order to support custom classes: StreamCustom and StreamBuilderCustom. StreamCustom is a class that extends Stream in order to represent a custom Stream. StreamBuilderCustom extends StreamBuilder in order to build the custom streams. No changes in main file or any other classes are necessary.
+Camera Sample Custom adds two new classes to the daemon in order to support custom classes: `StreamCustom` and `StreamBuilderCustom`. 
+`StreamCustom` is a class that extends `Stream` in order to represent a custom `Stream`. 
+`StreamBuilderCustom` extends `StreamBuilder` in order to build the custom streams.
+ No changes in main file or any other classes are necessary.
 
 #### StreamCustom
 
-StreamCustom class is a class that extends Stream class
+`StreamCustom` class is a class that extends `Stream` class:
 
 ```cpp
 class StreamCustom : public Stream {
 ```
 
-Stream class has some methods that needs to be implemented by children classes: get_path, get_name, get_gstreamer_pipeline and get_formats. Optionally finalize_gstreamer_pipeline can be overridden to clean any resource that was created by create_gstreamer_pipeline.
+`Stream` class has some methods that need to be implemented by child classes: `get_path()`, `get_name()`, `get_gstreamer_pipeline()` and `get_formats()`. 
+Optionally `finalize_gstreamer_pipeline()` can be overridden to clean any resource that was created by `create_gstreamer_pipeline()`.
 
-##### get_path: Returns the path that will be used to access the video resouce in rtsp URI.
+##### get_path()
+
+Returns the path that will be used to access the video resource in RTSP URI.
 
 ```cpp
 const std::string StreamCustom::get_path() const
@@ -126,7 +146,9 @@ const std::string StreamCustom::get_path() const
 }
 ```
 
-##### get_name: Returns a human readable name of the video stream.
+##### get_name()
+
+Returns a human readable name of the video stream.
 
 ```cpp
 const std::string StreamCustom::get_name() const
@@ -135,7 +157,9 @@ const std::string StreamCustom::get_name() const
 }
 ```
 
-##### get_formats: Returns an optional list of supported formats and resolutions. In this case, an empty list.
+##### get_formats()
+
+Returns an optional list of supported formats and resolutions. In this case, an empty list.
 
 ```cpp
 const std::vector<Stream::PixelFormat> &StreamCustom::get_formats() const
@@ -145,11 +169,15 @@ const std::vector<Stream::PixelFormat> &StreamCustom::get_formats() const
 }                                                                        
 ```
 
-##### creates_gstreamer_pipeline: Creates the gstreamer pipeline to access the video to be exported.
+##### creates_gstreamer_pipeline()
 
-For this sample we use a really simple pipeline, that uses gstreamer videotestsrc to generate a sample video. For a more complex example, take a look at the [realsense sample](https://github.com/01org/camera-streaming-daemon/tree/master/samples/stream_realsense.cpp).
+Creates the gstreamer pipeline to access the video to be exported.
 
-This method is called when the client starts the video streaming. Cleanup for resources created by this method can be performed at `finalize_gstreamer_pipeline` method.
+For this sample we use a really simple pipeline, that uses gstreamer videotestsrc to generate a sample video. 
+For a more complex example, take a look at the [realsense sample](https://github.com/01org/camera-streaming-daemon/tree/master/samples/stream_realsense.cpp).
+
+This method is called when the client starts the video streaming. 
+Cleanup for resources created by this method can be performed at `finalize_gstreamer_pipeline` method.
 
 ```cpp
 GstElement *StreamCustom::create_gstreamer_pipeline(std::map<std::string, std::string> &params) const
@@ -173,12 +201,14 @@ GstElement *StreamCustom::create_gstreamer_pipeline(std::map<std::string, std::s
 }
 ```
 
-##### finalize_gstreamer_pipeline: Called when gstreamer pipeline is finalized so all needed cleanup can be
-performed.
+##### finalize_gstreamer_pipeline()
 
-Note that there is no need of freeing or g_object_unref the pipeline. This method is used only if custom class allocate any other resource for the video. 
+ Called when gstreamer pipeline is finalized so all needed cleanup can be performed.
 
-For the custom sample there is no need of having this function implemented. For a more complex example, take a look at the [realsense sample](https://github.com/01org/camera-streaming-daemon/tree/master/samples/stream_realsense.cpp).
+Note that there is no need of freeing or `g_object_unref` the pipeline. This method is used only if custom class allocate any other resource for the video. 
+
+For the custom sample there is no need of having this function implemented. 
+For a more complex example, take a look at the [realsense sample](https://github.com/01org/camera-streaming-daemon/tree/master/samples/stream_realsense.cpp).
 
 ```cpp
 void StreamRealSense::finalize_gstreamer_pipeline(GstElement *pipeline)
@@ -188,18 +218,22 @@ void StreamRealSense::finalize_gstreamer_pipeline(GstElement *pipeline)
 ```
 
 #### StreamBuilderCustom
-This is the class that will create the custom streams. It is essential that it extends StreamBuilder, because StreamBuilder constructor will register it as a `StreamBuilder` class.
+
+This is the class that will create the custom streams. 
+It is essential that it extends `StreamBuilder`, because `StreamBuilder` constructor will register it as a `StreamBuilder` class.
 
 ```cpp
 class StreamBuilderCustom final : public StreamBuilder {
 ```
 
-And it is necessary to create one instance of the StreamBuilderCustom object. We suggest doing it as a static variable in the cpp file
+And it is necessary to create one instance of the `StreamBuilderCustom` object. 
+We suggest doing it as a static variable in the cpp file:
 ```cpp
 static StreamBuilderCustom stream_builder;
 ```
 
-Method build_streams should be implemented to create the desired streams. This method is called by StreamManager and Streams created by it are kept during the execution of Camera-Streaming-Daemon to be used when publishing avahi services and when creating the *gstreamer* pipeline to stream the video.
+Method build_streams should be implemented to create the desired streams. 
+This method is called by `StreamManager` and `Streams` created by it are kept during the execution of Camera-Streaming-Daemon to be used when publishing avahi services and when creating the *gstreamer* pipeline to stream the video.
 
 ```cpp
 std::vector<Stream *> StreamBuilderCustom::build_streams()       
@@ -214,7 +248,8 @@ std::vector<Stream *> StreamBuilderCustom::build_streams()
 
 ### Adding StreamCustom and StreamBuilderCustom to the build system
 
-Now it is necessary to build and link `StreamCustom` and `StreamBuildCustom` classes to your final binary. We use [samples/Makefile.am](https://github.com/01org/camera-streaming-daemon/tree/master/samples/Makefile.am) file to add them
+Now it is necessary to build and link `StreamCustom` and `StreamBuildCustom` classes to your final binary. 
+We use [samples/Makefile.am](https://github.com/01org/camera-streaming-daemon/tree/master/samples/Makefile.am) file to add them:
 ```makefile
 camera_sample_custom_SOURCES = \  
    ${base_files} \               
@@ -225,4 +260,4 @@ camera_sample_custom_SOURCES = \
    stream_custom.h               
 ```
 
-Note that the main file used is the same main file from camera-streaming-daemon
+Note that the main file used is the same main file from CSD.

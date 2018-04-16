@@ -16,6 +16,7 @@
   * [Camera Definition File](guide/camera_definition_file.md)
   * [Autostart CSD](guide/autostart.md)
   * [Deploying CSD](guide/deploying.md)
+  * [CSD Architecture](guide/architecture.md)
   * [Extending CSD](guide/extending_csd.md)
 * [Contributing](contribute/README.md)
 

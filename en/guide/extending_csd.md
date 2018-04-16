@@ -1,6 +1,100 @@
 # Extending Camera Streaming Daemon
 
-## Create a Custom Video Stream
+Camera-Streaming-Daemon is designed and developed to be fully featured and support multiple types of cameras. There will still be requirement to support new type of camera or to customize features. By [design](../guide/architecture.md), CSD can be extended and customized.
+
+## List of Extensible Features :
+
+1. **`Camera Device`** : Camera-Streaming-Daemon has native support for auto detection of cameras that support the Video4Linux (V4L2) API. Details on cameras supported by CSD can be found [here](../guide/overview.md#supported-cameras-supported_cameras). This covers most of the regular Linux cameras but there are also many other cameras that are currently not supported. The support for any type of camera can be added in CSD. Also, any type of configurable camera parameter can be declared and exported to client (GCS).
+2. **`Image Capture`** : CSD supports image capture using gstreamer. Developer can implement new type of image capture (eg- image capture using opencv instead of gstreamer).
+3. **`Video Capture`** : CSD supports video capture using gstreamer. Developer can implement new type of video capture (eg - video capture using multimedia framework other than gstreamer).
+4. **`Video Streaming`** : CSD supports UDP and RTSP video streaming protocols using gstreamer. Developer can implement new type of video streaming (eg - HLS protocol).
+
+## Support Custom Camera Device
+
+Steps to add support for a new custom camera device are detailed below.
+
+#### 1. Extend CameraDevice Class
+To add support for new type of camera device in CSD, a custom class must be derived from `CameraDevice` base class. An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md). The class `CameraDeviceCustom` represents a custom type of camera device.
+
+**Action** : `CameraDeviceCustom` must implement the pure virtual functions of the base class `CameraDevice`
+
+```cpp
+class CameraDeviceCustom final : public CameraDevice {
+public:
+    CameraDeviceGazebo(std::string device);
+    ~CameraDeviceGazebo();
+    std::string getDeviceId();
+    int getInfo(struct CameraInfo &camInfo);
+    bool isGstV4l2Src();
+    int init(CameraParameters &camParam);
+    int uninit();
+    int resetParams(CameraParameters &camParam);
+    int setParam(CameraParameters &camParam, std::string param, const char *param_value,
+                 size_t value_size, int param_type);
+```
+
+**Action** : `CameraDeviceCustom` may overload other methods to provide the functionality.
+
+The configurable parameters of the custom camera device can be exported to the client(GCS) for control. Setting of these parameters and resetting of all the parameters must be handled by the `CameraDeviceCustom` class.
+
+**Action** : `CameraDeviceCustom` must declare the parameter name(string), ID(int) and type(enum) . Also set the default value of the parameter 
+
+```cpp
+int CameraDeviceCustom::init(CameraParameters &camParam)
+{
+    camParam.setParameterIdType(CameraParameters::CAMERA_MODE,
+                                CameraParameters::PARAM_ID_CAMERA_MODE,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter(CameraParameters::CAMERA_MODE,
+                          (uint32_t)CameraParameters::ID_CAMERA_MODE_VIDEO);
+    camParam.setParameterIdType("brightness", 101,
+                                CameraParameters::PARAM_TYPE_UINT8);
+    camParam.setParameter("brightness", (uint8_t)50);
+    camParam.setParameterIdType("contrast", 102,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter("contrast", (uint32_t)50);
+    camParam.setParameterIdType("hue", 103,
+                                CameraParameters::PARAM_TYPE_INT32);
+    camParam.setParameter("hue", (int32_t)-10);
+    camParam.setParameterIdType("zoom", 104,
+                                CameraParameters::PARAM_TYPE_REAL32);
+    camParam.setParameter("zoom", (float)0);
+    camParam.setParameterIdType("white_balance_mode", 105,
+                                CameraParameters::PARAM_TYPE_UINT32);
+    camParam.setParameter("white_balance_mode", (uint32_t)0);
+
+    return 0;
+}
+```
+
+**Action** : The `CameraDeviceCustom` must handle setting of the parameters declared and resetting of all the parameters.
+
+#### 2. Detect Custom Camera Device
+There must be a logic to detect the custom camera device. For example V4L2 camera devices are detected by scanning the linux device nodes /dev/video* and Gazebo camera is detected based on --enable-gazebo compile time flag.
+
+**Action** : Implement function to detect the custom camera device
+
+```cpp
+int CameraServer::detect_devices_custom(ConfFile &conf, std::vector<CameraComponent *> &camList)
+```
+**Action** : Call the function `detect_devices_custom` from the function that prepares the list of cameras in the system
+
+```cpp
+// prepare the list of cameras in the system
+int CameraServer::detectCamera(ConfFile &conf)
+```
+
+#### 3. Instantiate Custom Camera Device
+After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The CameraComponent will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`
+
+**Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-streaming-daemon/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
+
+```cpp
+    } else if (camdev_name.find("camera/custom") != std::string::npos) {
+        return std::make_shared<CameraDeviceCustom>(camdev_name);
+```
+
+## Create a Custom RTSP Video Stream
 
 Camera-Streaming-Daemon has native support for auto detection of video cameras exported as Video4Linux(V4L2) devices. This covers most of regular Linux cameras, but there are some cameras that don't have V4L2 support or cases where user wants to set very specific parameters or do custom post-processing in video before exporting.
 

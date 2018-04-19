@@ -109,7 +109,7 @@ Example (Ubuntu):
 video0=http://127.0.0.1:8000/camera-def-uvc.xml
 ```
 
-### [imgcap]
+### [imgcap] {#imgcap}
 
 Key | Description | Default
 -- | --- | ---
@@ -124,7 +124,7 @@ Example:
 location=~/Temp/
 ```
 
-### [vidcap]
+### [vidcap] {#vidcap}
 
 Key | Description | Default
 --- | --- | ---

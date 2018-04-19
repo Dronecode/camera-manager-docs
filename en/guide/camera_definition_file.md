@@ -2,6 +2,8 @@
 
 As defined in the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html), a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) may be used to specify information about a camera's advanced settings and parameters. A camera will supply the URI for its definition file on request (if one has been defined), so that the file can be downloaded and parsed by the client.
 
+> **Tip** Camera definition files for a number of cameras are provided in [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def). Definition files for attached Video4Linux (V4L2) devices can be create using [export_v4l2_param_xml](#export_v4l2_param_xml).  
+
 The *Camera Definition Files* can be hosted anywhere that is accessible to clients (including *QGroundControl* and Dronecode SDK apps). Often the files are served from the computer running CSD.
 
 CSD is able to supply the URIs for attached cameras using a mapping given in the [CSD Configuration File > \[uri section\]](../guide/configuration_file.md#uri).
@@ -9,8 +11,7 @@ CSD is able to supply the URIs for attached cameras using a mapping given in the
 This topic explains how to:
 * Serve the definition files on the CSD companion computer.
 * Map attached cameras to their definition file URIs in the CSD configuration file.
-
-> **Tip** Camera definition files for a number of cameras are provided in [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def).
+* Create *Camera Definition Files* for attached Video4Linux (V4L2) devices using the *export_v4l2_param_xml* tool. 
 
 
 ## Hosting Camera Definition Files
@@ -62,3 +63,30 @@ The fragments below show typical mappings for Aero and Ubuntu:
   ```
 
 > **Note** The "Aero URI" host is the address of Aero on the network. The Ubuntu address can be "localhost" (internal) because when testing both CSD and clients (e.g. *QGroundControl*) are typically being run on the same computer and can see this address.
+
+
+## V4L2 Camera Definition File Generator {#export_v4l2_param_xml}
+
+The CSD project includes the *export_v4l2_param_xml* tool to automate creation of *Camera Definition Files* for attached Video4Linux (V4L2) devices. 
+The tool queries the device for all available settings in order to populate the file.
+
+The command syntax is:
+```
+./export_v4l2_param_xml -d  <device node>  - f <output camera-def-file-name>
+```
+where:
+* `device node`: The V3L2 device (query available devices on the command line using: `ls -l /dev/video*`).
+* `output camera-def-file-name`: The generated file path/filename.
+
+
+The tool is provided as C++ source code in the CSD tree: [/tools/export_v4l2_param_xml](https://github.com/Dronecode/camera-streaming-daemon/tree/master/tools/export_v4l2_param_xml)). It is dependent on *tinyxml* which can be installed using:
+```
+$ sudo apt install libtinyxml-dev -y
+```
+
+To build and run the tool for a device `/dev/video0` (from the CSD root directory):
+```
+cd tools/export_v4l2_param_xml
+make
+./export_v4l2_param -d /dev/video0 -f camera_def.xml
+```

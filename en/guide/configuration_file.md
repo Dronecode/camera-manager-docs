@@ -113,13 +113,42 @@ video0=http://127.0.0.1:8000/camera-def-uvc.xml
 
 Key | Description | Default
 -- | --- | ---
-`location` | The local path with write permission where captured images will be saved (usually the system-standard "Temp" directory) | -
+`width` | Width of the image to be captured in pixels. | Full width of camera frame for sensor type (i.e 1080P - 1920, 720P - 1280, etc.)
+`height` | Height of the image to be captured in pixels. | Full height of camera frame for sensor type (i.e 1080P - 1080, 720P - 720, etc).
+`format` | Number/enum for image format that will be captured by default. Possible values:<ul><li>2 (Jpeg/<code>IMAGE_FILE_JPEG</code>)</li></ul>Notes:<ul><li>Currently only Jpeg is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/163">supported for image capture</a>.</li><li>At time of writing this cannot be overwritten in a <a href="../guide/camera_definition_file.md">Camera Definition File</a> (see <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/161">#161</a>).</li></ul> | 2 (JPEG).
+`location` | The local path with write permission where captured images will be saved (usually the system-standard "Temp" directory). The path should be accessible and writeable. | /tmp/
 
 Example:
 ```
 [imgcap]
 location=~/Temp/
 ```
+
+### [vidcap]
+
+Key | Description | Default
+--- | --- | ---
+`width` | TBD | TBD
+`height` | TBD | TBD
+`framerate` | TBD | TBD
+`bitrate` | TBD | TBD
+`encoder` | TBD | TBD
+`format` | TBD | TBD
+`location` | The local path with write permission where captured videos will be saved (usually the system-standard "Temp" directory). | -
+
+
+Example (Ubuntu):
+```
+[vidcap]
+width=640
+height=480
+framerate=25
+bitrate=1000
+encoder=3
+format=1
+location=/tmp/
+```
+
 
 
 ### [gazebo]

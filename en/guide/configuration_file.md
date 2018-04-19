@@ -111,13 +111,15 @@ video0=http://127.0.0.1:8000/camera-def-uvc.xml
 
 ### [imgcap] {#imgcap}
 
-<!-- These specify the default values for image capture, that will eventually be over ridable by parameter settings from MAVLink -->
+This section defines the *default* values used for image capture. With the exception of `location` it should be possible override the values over MAVLink using parameters defined in the [Camera Definition File](../guide/camera_definition_file.md).
+
+> **Note** At time of writing these default values cannot yet be overridden (see [#161](https://github.com/Dronecode/camera-streaming-daemon/issues/161)).
 
 Key | Description | Default
 -- | --- | ---
 `width` | Width of the image to be captured in pixels. | Full width of camera frame for sensor type (i.e 1080P - 1920, 720P - 1280, etc.)
 `height` | Height of the image to be captured in pixels. | Full height of camera frame for sensor type (i.e 1080P - 1080, 720P - 720, etc).
-`format` | Image format (number). <br>Possible values:<ul><li>2 (Jpeg/<code>IMAGE_FILE_JPEG</code>)</li></ul>Notes:<ul><li>Currently only Jpeg is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/163">supported for image capture</a>.</li><li>At time of writing this cannot be overwritten in a <a href="../guide/camera_definition_file.md">Camera Definition File</a> (see <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/161">#161</a>).</li></ul> | 2 (JPEG).
+`format` | Image format (number). <br>Possible values:<ul><li>2 (Jpeg/<code>IMAGE_FILE_JPEG</code>)</li></ul>Notes:<ul><li>Currently only Jpeg is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/163">supported for image capture</a>.</li></ul> | 2 (JPEG).
 `location` | The local path with write permission where captured images will be saved (usually the system-standard "Temp" directory). The path should be accessible and writeable. | /tmp/
 
 Example:
@@ -128,7 +130,9 @@ location=~/Temp/
 
 ### [vidcap] {#vidcap}
 
-<!-- These specify the default values for video capture, that will eventually be over ridable by parameter settings from MAVLink -->
+This section defines the *default* values used for video capture. With the exception of `location` it should be possible override the values over MAVLink using parameters defined in the [Camera Definition File](../guide/camera_definition_file.md).
+
+> **Note** At time of writing these default values cannot yet be overridden (see [#161](https://github.com/Dronecode/camera-streaming-daemon/issues/161)).
 
 Key | Description | Default
 --- | --- | ---
@@ -136,8 +140,8 @@ Key | Description | Default
 `height` | Height of the video to be captured in pixels. | Full height of camera frame for sensor type (i.e 1080P - 1080, 720P - 720, etc).
 `framerate` | Camera framerate for video capture. | Default framerate queried from camera sensor (e.g. 25).
 `bitrate` | Bitrate of the encoded video data in KBps. Supported values: 1 - 2048000. | 512
-`encoder` | Encoder (number). <br>Possible values:<ul><li>3 (H.264/<code>VIDEO_CODING_AVC</code>)</li></ul>Notes:<ul><li>Currently only H.264 is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/168">supported for video capture</a>.</li><li>At time of writing this cannot be overwritten in a <a href="../guide/camera_definition_file.md">Camera Definition File</a> (see <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/161">#161</a>).</li></ul>  | 3 (AVC).
-`format` | Video file format (number). <br>Possible values:<ul><li>1 (Moving Pictures Expert Group 4/<code>VIDEO_FILE_MP4</code>)</li></ul>Notes:<ul><li>Currently only MP4 is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/169">supported for video capture</a>.</li><li>At time of writing this cannot be overwritten in a <a href="../guide/camera_definition_file.md">Camera Definition File</a> (see <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/161">#161</a>).</li></ul> | 1 (MP4)
+`encoder` | Encoder (number). <br>Possible values:<ul><li>3 (H.264/<code>VIDEO_CODING_AVC</code>)</li></ul>Notes:<ul><li>Currently only H.264 is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/168">supported for video capture</a>.</li></ul>  | 3 (AVC).
+`format` | Video file format (number). <br>Possible values:<ul><li>1 (Moving Pictures Expert Group 4/<code>VIDEO_FILE_MP4</code>)</li></ul>Notes:<ul><li>Currently only MP4 is <a href="https://github.com/Dronecode/camera-streaming-daemon/issues/169">supported for video capture</a>.</li></ul> | 1 (MP4)
 `location` | The local path with write permission where captured videos will be saved (usually the system-standard "Temp" directory). | -
 
 

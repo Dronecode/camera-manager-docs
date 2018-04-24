@@ -1,12 +1,12 @@
 # Quickstart Guide — Intel Aero
 
-> **Tip** CSD is pre-integrated into *Intel Aero* images (1.6.1 and later). These instructions are only needed when developing and testing newer versions of CSD.
+> **Tip** DCM is pre-integrated into *Intel Aero* images (1.6.1 and later). These instructions are only needed when developing and testing newer versions of DCM.
 
-This guide provides turnkey instructions for building CSD on Ubuntu LTS 16.04 (with support for the RealSense 3D Camera, Aero bottom facing camera, MAVLink and Avahi) and then deploying it to *Intel Aero*.
+This guide provides turnkey instructions for building DCM on Ubuntu LTS 16.04 (with support for the RealSense 3D Camera, Aero bottom facing camera, MAVLink and Avahi) and then deploying it to *Intel Aero*.
 
-## Build CSD
+## Build DCM
 
-To build CSD:
+To build DCM:
 1. Install the [Core](#core_deps), [Avahi](#avahi_deps) and [RealSense](#realsense_deps) pre-requisites listed above:
    ```sh
    sudo apt-get update -y
@@ -24,49 +24,48 @@ To build CSD:
    sudo apt update -y
    sudo apt-get install librealsense-dev -y
    ```
-1. Get the CSD source code by cloning the the [camera-streaming-daemon](https://github.com/intel/camera-streaming-daemon) repo (or your fork):
+1. Get the DCM source code by cloning the [camera-manager](https://github.com/Dronecode/camera-manager) repo (or your fork):
    ```sh
-   git clone https://github.com/intel/camera-streaming-daemon.git
-   cd camera-streaming-daemon
+   git clone https://github.com/Dronecode/camera-manager.git
+   cd camera-manager
    git submodule update --init --recursive
    ```
-1. Configure CSD with the normal Aero settings:
+1. Configure DCM with the normal Aero settings:
    ```
    ./autogen.sh && ./configure --enable-aero --enable-realsense --enable-mavlink --enable-avahi
    ```
-1. Build CSD for Aero:
+1. Build DCM for Aero:
    ```
    make
    ```
 
-The *csd* binary and *csd.system* files are generated in the root of the CSD source tree.
+The *dcm* binary and *dronecode-camera-manager.service* files are generated in the root of the DCM source tree.
 
-## Deploy CSD to Aero
+## Deploy DCM to Aero
 
-To deploy CSD to Aero:
+To deploy DCM to Aero:
 
-1. Copy the *csd* binary using *scp*:
+1. Copy the *dcm* binary using *scp*:
    ```
-   scp csd uname@ip-addr:/usr/bin/
+   scp dcm uname@ip-addr:/usr/bin/
    ```
    where:
    * `ip-addr` is IP address of Aero on the network (check using *ifconfig*)
    * `uname` is `root` (Yocto) or `<user-defined>` (Ubuntu)
 
-1. Reboot Aero (Aero starts CSD on boot)
+1. Reboot Aero (Aero starts DCM on boot)
 
-> **Note** The Aero configuration file ([aero.conf](https://github.com/intel/camera-streaming-daemon/blob/master/samples/config/aero.conf)) and [autostart file](../guide/autostart.md) (*csd.service*) typically do not change or need to be updated. If required, you could do so using the following commands:
+> **Note** The Aero configuration file ([aero.conf](https://github.com/Dronecode/camera-manager/blob/master/samples/config/aero.conf)) and [autostart file](../guide/autostart.md) (*dronecode-camera-manager.service*) typically do not change or need to be updated. If required, you could do so using the following commands:
   ```
-  scp samples/config/aero.conf uname@ip-addr:/etc/csd/main.conf
-  scp csd.system uname@ip-addr:/lib/system/system/csd.system
+  scp samples/config/aero.conf uname@ip-addr:/etc/dcm/main.conf
+  scp dronecode-camera-manager.service uname@ip-addr:/lib/system/system/dronecode-camera-manager.service
   ```
-  
 
 
 ## Verify Installation
 
-1. Make sure CSD is running:
+1. Make sure DCM is running:
    ```sh
-   systemctl status csd
+   systemctl status dcm
    ```
-1. Run the [Sanity Tests](../test/sanity_tests.md) to verify that CSD is working correctly.
+1. Run the [Sanity Tests](../test/sanity_tests.md) to verify that DCM is working correctly.

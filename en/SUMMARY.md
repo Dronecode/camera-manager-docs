@@ -2,7 +2,7 @@
 
 * [Introduction](README.md)
 * [Getting Started](getting_started/README.md)
-  * [Building/Running CSD](getting_started/building_installation.md)
+  * [Building/Running DCM](getting_started/building_installation.md)
   * [Quickstart — Intel Aero](getting_started/quick_start_intel_aero.md)
   * [Quickstart — Ubuntu Camera](getting_started/quick_start_ubuntu_webcam.md)
   * [Quickstart — Gazebo Camera](getting_started/quick_start_ubuntu_gazebo.md)
@@ -12,12 +12,12 @@
   * [Test Apps](test/test_apps.md)
 * [Guide](guide/overview.md)
   * [Using RTSP](guide/rtsp.md)
-  * [CSD Configuration File](guide/configuration_file.md)
+  * [DCM Configuration File](guide/configuration_file.md)
   * [Camera Definition File](guide/camera_definition_file.md)
-  * [Autostart CSD](guide/autostart.md)
-  * [Deploying CSD](guide/deploying.md)
-  * [CSD Architecture](guide/architecture.md)
-  * [Extending CSD](guide/extending_csd.md)
+  * [Autostart DCM](guide/autostart.md)
+  * [Deploying DCM](guide/deploying.md)
+  * [DCM Architecture](guide/architecture.md)
+  * [Extending DCM](guide/extending.md)
 * [Contributing](contribute/README.md)
 
 

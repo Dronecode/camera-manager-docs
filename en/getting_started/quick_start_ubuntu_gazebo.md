@@ -2,12 +2,12 @@
 
 > **Warning** These instructions are in progress. At time of writing build without `--enable-mavlink` and connect on `udp port 5600` (RTSP publishing not supported). To be reviewed 9 March 2018. 
 
-This Quickstart shows how to build CSD on Ubuntu LTS 16.04 (with support for MAVLink and Avahi) and connect to a camera running within a Gazebo/PX4 vehicle simulation. 
+This Quickstart shows how to build DCM on Ubuntu LTS 16.04 (with support for MAVLink and Avahi) and connect to a camera running within a Gazebo/PX4 vehicle simulation. 
 
 
 ## Install Gazebo/SITL
 
-First install Gazebo/SITL (CSD requires the dependency is installed before building):
+First install Gazebo/SITL (DCM requires the dependency is installed before building):
 
 1. Install [Gazebo and PX4 SITL](#gazebo_deps) using the scripts in the *PX4 Developer Guide*: [Development Environment on Linux > jMAVSim/Gazebo Simulation](https://dev.px4.io/en/setup/dev_env_linux.html#jmavsimgazebo-simulation).
 
@@ -23,9 +23,9 @@ First install Gazebo/SITL (CSD requires the dependency is installed before build
      ```
      
 
-## Set up CSD
+## Set up DCM
 
-To set up CSD for use with Gazebo:
+To set up DCM for use with Gazebo:
 
 1. Install the [Core](#core_deps) and [Avahi](#avahi_deps) pre-requisites:
    ```sh
@@ -39,20 +39,20 @@ To set up CSD for use with Gazebo:
    # Avahi
    sudo apt-get install libavahi-client-dev libavahi-core-dev libavahi-glib-dev -y
    ```
-1. Get the CSD source code by cloning the the [camera-streaming-daemon](https://github.com/intel/camera-streaming-daemon) repo (or your fork):
+1. Get the DCM source code by cloning the the [camera-manager](https://github.com/Dronecode/camera-manager) repo (or your fork):
    ```sh
-   git clone https://github.com/intel/camera-streaming-daemon.git
-   cd camera-streaming-daemon
+   git clone https://github.com/Dronecode/camera-manager.git
+   cd camera-manager
    git submodule update --init --recursive
    ```
-1. Configure CSD as shown:
+1. Configure DCM as shown:
 ```
 ./autogen.sh && ./configure --enable-mavlink --enable-avahi --enable-gazebo
 ```
 
-## Run CSD/Gazebo
+## Run DCM/Gazebo
 
-To run CSD on Ubuntu along with Gazebo PX4-SITL:
+To run DCM on Ubuntu along with Gazebo PX4-SITL:
  
 1. Open *QGroundControl* build from master branch.
 1. Start PX4-SITL gazebo from the PX4 **/Firmware** folder:
@@ -60,14 +60,14 @@ To run CSD on Ubuntu along with Gazebo PX4-SITL:
    make posix gazebo_typhoon_h480
    ```
 1. Serve the sample [Camera Definition Files](../guide/camera_definition_file.md):
-   * Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+   * Open a new terminal to [/samples/def](https://github.com/Dronecode/camera-manager/tree/master/samples/def)
    * Enter the following command to start the server on the default port (8000):
      ```
      python -m SimpleHTTPServer
      ```
-1. Run CSD, specifying the Gazebo [configuration file](../getting_started/building_installation.md#configuration-file-runtime):
+1. Run DCM, specifying the Gazebo [configuration file](../getting_started/building_installation.md#configuration-file-runtime):
    ```sh
-   ./csd -c samples/config/gazebo.conf
+   ./dcm -c samples/config/gazebo.conf
    ```
 
-Then run the [Sanity Tests](../test/sanity_tests.md) to verify that CSD is working correctly.
+Then run the [Sanity Tests](../test/sanity_tests.md) to verify that DCM is working correctly.

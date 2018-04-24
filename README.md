@@ -1,9 +1,9 @@
-# Camera Streaming Daemon (Documentation Source Code)
+# Dronecode Camera Manager Documentation - Source Code
 
-The *Camera Streaming Daemon* (CSD) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/) via MAVLink and RTSP. Documentation for the CSD is available here: [TEMP](https://hamishwillee.gitbooks.io/camera-streaming-daemon/content/en/)
+The *Dronecode Camera Manager* (DCM) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/) via MAVLink and RTSP. Documentation for the CM is available here: [TEMP](https://hamishwillee.gitbooks.io/camera-streaming-daemon/content/en/)
 
 This repository contains the *source code for the documentation*.
 
-The documentation is hosted on [gitbook.com](https://www.gitbook.com/book/hamishwillee/dronecode-camera-server-sdk/details). It is generated from source code (in markdown format) using the [gitbook toolchain](https://toolchain.gitbook.com/). 
+The documentation is hosted on [gitbook.com](https://legacy.gitbook.com/book/hamishwillee/camera-streaming-daemon/details). It is generated from source code (in markdown format) using the [gitbook toolchain](https://toolchain.gitbook.com/). 
 
-The CSD source code itself can be found on github here: [intel/camera-streaming-daemon](https://github.com/intel/camera-streaming-daemon/).
+The CM source code itself can be found on github here: [Dronecode/camera-manager](https://github.com/Dronecode/camera-manager).

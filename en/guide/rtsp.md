@@ -4,17 +4,17 @@
 
 The diagram below shows the common sequence for advertising and accessing RTSP video streams.
 
-<!-- 
+<!-- generate in https://mermaidjs.github.io/mermaid-live-editor
 {/% mermaid %}
 sequenceDiagram;
     participant User
     participant GCS
-    participant CSD
+    participant DCM
     User->>GCS: Set video settings
-    CSD->> GCS: Advertise streams (Avahi/Zeroconf)
+    DCM->> GCS: Advertise streams (Avahi/Zeroconf)
     User->>GCS: Choose video stream
-    GCS->>CSD: Request video stream (URI)
-    CSD->>GCS: Stream video using Gstreamer
+    GCS->>DCM: Request video stream (URI)
+    DCM->>GCS: Stream video using Gstreamer
     GCS->>User: Enjoy the show!
 {/% endmermaid %}
 -->
@@ -23,11 +23,11 @@ sequenceDiagram;
 
 ## Video Advertising (Avahi)
 
-> **Tip** In order to use this service CSD must be built with [Avahi enabled](../getting_started/building_installation.md#configure). 
+> **Tip** In order to use this service DCM must be built with [Avahi enabled](../getting_started/building_installation.md#configure). 
 
 The [Avahi](https://avahi.org/) implementation of the [Zeroconf](http://www.zeroconf.org/) protocol is used to advertise available video streams. All streams are published as RTPS services with path, ip and port necessary to access the resource. Extra information about video is published using `txt-record` field from the Avahi resource.
 
-It is possible to use the application `avahi-browse` to retrieve the information published by the Camera Streaming Daemon. A basic output of the command is the following:
+It is possible to use the application `avahi-browse` to retrieve the information published by the Camera Manager. A basic output of the command is the following:
 
 ```
 $ avahi-browse -arl
@@ -49,7 +49,7 @@ $ avahi-browse -arl
 
 ## Video Streaming
 
-Camera Streaming Daemon uses *GStreamer* RTSP servers to handle video streaming. The streams are accessed using a RTSP URI created using the information from *zeroconf* output.
+The *Camera Manager* uses *GStreamer* RTSP servers to handle video streaming. The streams are accessed using a RTSP URI created using the information from *zeroconf* output.
 
 The base URI to access video streams is:
 ```

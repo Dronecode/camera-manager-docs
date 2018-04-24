@@ -1,17 +1,17 @@
-# CSD Architecture
+# DCM Architecture
 
-Theis topic provides an overview of the *Camera Streaming Daemon* architecture, using a class diagram and a description of the main classes.
+This topic provides an overview of the *Dronecode Camera Manager* (DCM) architecture, using a class diagram and a description of the main classes.
 
-> **Tip** Developers who want to support new types of cameras or custom video streams should see [Extending CSD](../guide/extending_csd.md).
+> **Tip** Developers who want to support new types of cameras or custom video streams should see [Extending DCM](../guide/extending.md).
 
 ## Class Diagram {#class_diagram}
 
-![Camera Server class diagram](../../assets/camera_server_class_diagram.png)
+![Camera Manager class diagram](../../assets/camera_manager_class_diagram.png)
 
 ## CameraServer
 
 The `CameraServer` class detects camera devices attached to the host computer and creates (and configures) a `CameraComponent` for each of them. 
-The configuration settings are read from the [CSD Configuration File](../guide/configuration_file.md).
+The configuration settings are read from the [DCM Configuration File](../guide/configuration_file.md).
 
 ## CameraComponent
 

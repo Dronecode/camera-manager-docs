@@ -1,6 +1,6 @@
-# Build & Run the Camera Streaming Daemon
+# Build & Run the Camera Manager
 
-This topic explains how to setup and run the *Camera Streaming Daemon* (CSD) on a Linux computer.
+This topic explains how to setup and run the *Dronecode Camera Manager* (DCM) on a Linux computer.
 
 The build system follows a typical *configure > build > install cycle*. The [configuration](#configure) step allows you enable/disable specific features in the build, thereby choosing the combination of features that best-fit your requirements.
 
@@ -8,9 +8,9 @@ The build system follows a typical *configure > build > install cycle*. The [con
 
 ## Prerequisites {#dependencies}
 
-The CSD can be configured to enable/disable specific functionality at compile-time. As a result, some dependencies are only required in order to use specific features. 
+The DCM can be configured to enable/disable specific functionality at compile-time. As a result, some dependencies are only required in order to use specific features. 
 
-The following packages are needed to compile CSD with core functionality (RTSP streaming and MAVLink support):
+The following packages are needed to compile the DCM with core functionality (RTSP streaming and MAVLink support):
 
 - Autoconf and libtool (for build configuration)
 - GCC/G++ compiler 4.9 or newer
@@ -32,7 +32,7 @@ The following sections show how to install the required packages on Ubuntu 16.04
 
 ### Core Dependencies {#core_deps}
 
-The core dependencies are required to build CSD with MAVLink and RTSP video streaming support.
+The core dependencies are required to build DCM with MAVLink and RTSP video streaming support.
 ```sh
 sudo apt-get update -y
 sudo apt-get install git autoconf libtool python-pip -y
@@ -64,12 +64,12 @@ sudo apt update -y
 sudo apt-get install librealsense-dev -y
 ```
 
-<!-- What are runtime dependencies? https://github.com/intel/camera-streaming-daemon/issues/124 -->
+<!-- What are the runtime dependencies? https://github.com/Dronecode/camera-manager-docs/issues/10 -->
 
 > **Note** The RealSense 2 SDK is not supported. 
 
 <span></span>
-> **Note** CSD only has access to this camera when it is **not being used** for optical flow or VIO)
+> **Note** The DCM only has access to this camera when it is **not being used** for optical flow or VIO.
 
 ### Gazebo {#gazebo_deps}
 
@@ -78,10 +78,10 @@ The easiest way to set up Gazebo and the PX4 simulator to use the *PX4 Developer
 
 ### Get the Source Code
 
-Clone the [camera-streaming-daemon](https://github.com/intel/camera-streaming-daemon) repo (or your fork):
+Clone the [camera-manager](https://github.com/Dronecode/camera-manager) repo (or your fork):
 ```sh
-git clone https://github.com/intel/camera-streaming-daemon.git
-cd camera-streaming-daemon
+git clone https://github.com/Dronecode/camera-manager.git
+cd camera-manager
 git submodule update --init --recursive
 ```
 
@@ -89,27 +89,27 @@ This fetches all the sources for the project (including the [MAVLink C library](
 
 > **Note** Alternatively you can do this in one line:
   ```
-  git clone https://github.com/intel/camera-streaming-daemon.git --recursive
+  git clone https://github.com/Dronecode/camera-manager.git --recursive
   ```
 
 ### Serve Camera Definition Files
 
-Before running CSD with MAVLink enabled *on Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
-1. Open a new terminal to [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def)
+Before running the *Camera Manager* with MAVLink enabled *on Ubuntu*, you should start serving the sample [Camera Definition Files](../guide/camera_definition_file.md):
+1. Open a new terminal to [/samples/def](https://github.com/Dronecode/camera-manager/tree/master/samples/def)
 1. Enter the following command to start the server on the default port (8000):
    ```
    python -m SimpleHTTPServer
    ```
 
-> **Tip** The [Camera Definition Files](../guide/camera_definition_file.md) is only needed if you are running CSD with MAVLink enabled. 
+> **Tip** The [Camera Definition Files](../guide/camera_definition_file.md) is only needed if you are running DCM with MAVLink enabled. 
 
 <span></span>
-> **Note** Here we chose to serve the the file from Ubuntu. In fact, the file can be hosted anywhere that is accessible to clients (e.g. QGroundControl, Dronecode SDK), provided you update the [CSD Configuration File](../guide/configuration_file.md) with its URI. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
+> **Note** Here we chose to serve the the file from Ubuntu. In fact, the file can be hosted anywhere that is accessible to clients (e.g. QGroundControl, Dronecode SDK), provided you update the [DCM Configuration File](../guide/configuration_file.md) with its URI. For more information see [Camera Definition Files](../guide/camera_definition_file.md).
 
 
 ## Configure {#configure}
 
-Configuration allows you to specify the features that will be included when CSD is compiled (this step need only be done once).
+Configuration allows you to specify the features that will be included when DCM is compiled (this step need only be done once).
 
 The full configuration syntax is given below:
 ```sh
@@ -123,7 +123,7 @@ The optional configuration options enable specific functionality at compile-time
 * `--enable-mavlink`: Enables MAVLink [Camera Protocol](https://mavlink.io/en/protocol/camera.html) support.
 * `--enable-gazebo`: Enables Gazebo camera.
 
-In addition, CSD generates the file **csd.service** by default (see [Auto-start CSD](../guide/autostart.md)). File generation can be disabled/configured using:
+In addition, DCM generates the file **dronecode-camera-manager.service** by default (see [Auto-start DCM](../guide/autostart.md)). File generation can be disabled/configured using:
 * `--disable-systemd`: Disable *systemd* support (i.e. on systems where *systemd* is not present).
 * `--with-systemdsystemunitdir <path>`: Set the *systemd* system directory to `<path>` (Default is taken from **pkg-config**).
 
@@ -140,28 +140,28 @@ Gazebo support:      no
 
 ## Build
 
-After configuration, build the CSD using *make*:
+After configuration, build the camera manager using *make*:
 ```
 make
 ```
 
-The *csd* executable will be created in the root of your CSD source tree (along with the Intel Aero CSD startup file: **csd.service**).
+The *dcm* executable will be created in the root of your DCM source tree (along with the Intel Aero DCM startup file: **dronecode-camera-manager.service**).
 
-## Run{#run_csd}
+## Run{#run_dcm}
 
-The line below shows how to start CSD, specifying a [CSD Configuration File](../guide/configuration_file.md) (in this case the Ubuntu **.conf** file in the source tree):
+The line below shows how to start DCM, specifying a [DCM Configuration File](../guide/configuration_file.md) (in this case the Ubuntu **.conf** file in the source tree):
 ```
-./csd -c samples/config/ubuntu.conf
+./dcm -c samples/config/ubuntu.conf
 ```
 
-> **Tip** The [samples/config](https://github.com/intel/camera-streaming-daemon/tree/master/samples/config) directory contains sample [configuration files](../guide/configuration_file.md) that you can use to set up CSD for use on Ubuntu, Aero and other platforms. To use a sample file, copy it to **/etc/csd/main.conf**, specify it in the `CSD_CONF_FILE` environment variable, or set the `-c` switch when starting CSD.
+> **Tip** The [samples/config](https://github.com/Dronecode/camera-manager/tree/master/samples/config) directory contains sample [configuration files](../guide/configuration_file.md) that you can use to set up the DCM for use on Ubuntu, Aero and other platforms. To use a sample file, copy it to **/etc/dcm/main.conf**, specify it in the `DCM_CONF_FILE` environment variable, or set the `-c` switch when starting the DCM.
 
 Other command line options can be displayed using the `-h` flag:
 ```sh
-$ ./csd -h
-csd [OPTIONS...]
+$ ./dcm -h
+dcm [OPTIONS...]
 
-  -c --conf-file                   .conf file with configurations for camera-streaming-daemon.
+  -c --conf-file                   .conf file with configurations for dronecode-camera-manager.
   -d --conf-dir <dir>              Directory where to look for .conf files overriding
                                    default conf file.
   -g --debug-log-level <level>     Set debug log level. Levels are
@@ -170,9 +170,9 @@ csd [OPTIONS...]
   -h --help                        Print this message
 ```
 
-> **Note** CSD can also be started automatically on boot. This is discussed in [Quickstart — Intel Aero](../getting_started/quick_start_intel_aero.md) and [Autostart CSD](../guide/autostart.md).
+> **Note** DCM can also be started automatically on boot. This is discussed in [Quickstart — Intel Aero](../getting_started/quick_start_intel_aero.md) and [Autostart DCM](../guide/autostart.md).
 
 
 ## Sanity Tests
 
-After installing CSD, use the [Sanity Tests](../test/sanity_tests.md) to verify that CSD is working correctly.
+After installing **dcm**, use the [Sanity Tests](../test/sanity_tests.md) to verify that DCN is working correctly.

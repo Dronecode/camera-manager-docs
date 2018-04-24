@@ -1,14 +1,14 @@
-# Extending Camera Streaming Daemon
+# Extending Camera Manager
 
-The *Camera Streaming Daemon* (CSD) is [architected](../guide/architecture.md) so that it can be extended to integrate with any type of camera (attached to the host OS) and expose any camera feature. This topic explains main steps for extending the different features. 
+The *Dronecode Camera Manager* (DCM) is [architected](../guide/architecture.md) so that it can be extended to integrate with any type of camera (attached to the host OS) and expose any camera feature. This topic explains main steps for extending the different features. 
 
-> **Tip** Out of the box CSD already [supports many cameras](../guide/overview.md#supported-cameras-supported_cameras) including most regular Linux cameras (those that use the Video4Linux API). It also provides access to camera features including image capture, video capture and UDP and RTSP video streaming via *GStreamer*. 
+> **Tip** Out of the box DCM already [supports many cameras](../guide/overview.md#supported-cameras-supported_cameras) including most regular Linux cameras (those that use the Video4Linux API). It also provides access to camera features including image capture, video capture and UDP and RTSP video streaming via *GStreamer*. 
 
 ## Extensible Features
  
 Feature | Description
 --- | ---
-Custom Camera Devices/Parameters | CSD can be extended to support any (other) camera type and any configurable camera parameter can be declared and exported to a client (GCS).
+Custom Camera Devices/Parameters | DCM can be extended to support any (other) camera type and any configurable camera parameter can be declared and exported to a client (GCS).
 Image Capture | Developers can implement new types of image capture (for example, image capture using *OpenCV* instead of *GStreamer*).
 Video Capture | Developers can implement new types of video capture (for example, video capture using a multimedia framework other than *GStreamer*).
 Video Streaming | Developers can implement new types of video streaming (e.g. HLS protocol).
@@ -19,7 +19,7 @@ In order to support a new type of camera a custom class must be derived from `Ca
 
 ### 1. Extend CameraDevice Class
 
-To add support for new type of camera device in CSD, a custom class must be derived from `CameraDevice`. 
+To add support for new type of camera device in DCM, a custom class must be derived from `CameraDevice`. 
 An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md#class_diagram). 
 The class `CameraDeviceCustom` represents a custom type of camera device.
 
@@ -98,7 +98,7 @@ int CameraServer::detectCamera(ConfFile &conf)
 
 After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The `CameraComponent` will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`.
 
-**Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-streaming-daemon/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
+**Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-manager/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
 
 ```cpp
     } else if (camdev_name.find("camera/custom") != std::string::npos) {
@@ -114,12 +114,12 @@ The `StreamManager` class keeps a list of all created `Stream` elements, each on
 These `Stream` objects are used by `AvahiPublisher` and `RTSPServer` classes to perform the streaming and stream-advertising.
 
 There are two samples in [samples directory](https://github.com/01org/camera-streaming-daemon/tree/master/samples) using this approach, 
-**camera-sample-custom** and **camera-sample-realsense*. 
-We will explore **camera-sample-custom** in order to learn all steps necessary to create a CSD custom video stream class.
+**camera-sample-custom** and **camera-sample-realsense**. 
+We will explore **camera-sample-custom** in order to learn all steps necessary to create a DCM custom video stream class.
 
 ### Camera Sample Custom
 
-Camera Sample Custom adds two new classes to the daemon in order to support custom classes: `StreamCustom` and `StreamBuilderCustom`. 
+Camera Sample Custom adds two new classes to the manager in order to support custom classes: `StreamCustom` and `StreamBuilderCustom`. 
 `StreamCustom` is a class that extends `Stream` in order to represent a custom `Stream`. 
 `StreamBuilderCustom` extends `StreamBuilder` in order to build the custom streams.
  No changes in main file or any other classes are necessary.
@@ -233,7 +233,7 @@ static StreamBuilderCustom stream_builder;
 ```
 
 Method build_streams should be implemented to create the desired streams. 
-This method is called by `StreamManager` and `Streams` created by it are kept during the execution of Camera-Streaming-Daemon to be used when publishing avahi services and when creating the *gstreamer* pipeline to stream the video.
+This method is called by `StreamManager` and `Streams` created by it are kept during the execution of *Camera Manager* to be used when publishing the Avahi services and when creating the *gstreamer* pipeline to stream the video.
 
 ```cpp
 std::vector<Stream *> StreamBuilderCustom::build_streams()       
@@ -260,4 +260,4 @@ camera_sample_custom_SOURCES = \
    stream_custom.h               
 ```
 
-Note that the main file used is the same main file from CSD.
+Note that the main file used is the same main file from DCM.

@@ -1,6 +1,6 @@
 # Manual Testing
 
-This topic shows how to test the main functionality provided by CSD:
+This topic shows how to test the main functionality provided by DCM:
 * List the video streams that are being published and display the video streams.
 * Control the camera using MAVLink.
 
@@ -44,35 +44,35 @@ Testing of video streaming can be done using a vlc player or a gstreamer client 
 
 To test video streaming using vlc:
 ```sh
-vlc rtsp://<ip_csd_running_system>:8554/videox
+vlc rtsp://<ip_dcm_running_system>:8554/videox
 ```
 
 To test video streaming using gstreamer client pipeline:
 ```
-gst-launch-1.0 uridecodebin uri=<ip_csd_running_system>:8554/videox
+gst-launch-1.0 uridecodebin uri=<ip_dcm_running_system>:8554/videox
 ```
 
-In order to test the video streaming using QGC, select RTSP Video Source in General Setting-> Video ->Video Source and fill in uri as rtsp://ip_csd_running_system:8554/videox. Observe the video in video area in fly  view.
+In order to test the video streaming using QGC, select **RTSP Video Source** in **General Setting > Video > Video Source** and fill in URI as `rtsp://ip_dcm_running_system:8554/videox`. Observe the video in the video area in *Fly View*.
 
 ## Camera Control 
 
-Testing camera control parameters requires mavlink enabled csd, a QGC app build from master and a http server (Follow https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04 to install apache server).
+Testing camera control parameters requires DCM be [built with MAVLink enabled](../getting_started/building_installation.md#configure), a QGC app build from master and a HTTP server (Follow https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04 to install the *Apache* server).
 
-1. Host the camera definition file present in samples directory using http server. To host using apache server copy the file to /var/www/html:
+1. Host the camera definition file present in samples directory using a HTTP server. To host using the *Apache* server copy the file to /var/www/html:
    ```
-   cp ~/camera-streaming-daemon/samples/camera-def-rs-rgb.xml /var/www/html
+   cp ~/camera-manager/samples/defcamera-def-rs-rgb.xml /var/www/html
    ```
 
    The aero image has an aero-http server to host camera definition file. Copying the camera definition files to /var/http will host the files.
    
-1. Update the uri section in conf file with appropriate ip adress. Sample conf files are present in files folder in samples directory.
+1. Update the `uri` section in conf file with appropriate IP address. Sample conf files are present in files folder in samples directory.
 1. Open QGC build from master. Select **General Settings > Video Source > RTSP Video Stream**. Fill in the video URI and observe the video in fly view. 
-1. In fly view, select camera from dropdown list located in top right corner under compass. Settings button in left top corner of the box can be used to set the control parameters of the camera.
+1. In *Fly View*, select camera from dropdown list located in top right corner under compass. Settings button in left top corner of the box can be used to set the control parameters of the camera.
 
 ### Image capture
 
-Testing image capture requires MAVLink enabled csd and a QGC app build from master.
+Testing image capture requires that DCM is [built with MAVLink enabled](../getting_started/building_installation.md#configure) and a QGC app built from master.
 
 1. In QGC, disable the video streaming: **General Settings > Video Source > Video Stream Disabled**.
-1. Create a directory to store the image and update the location in imgcap section of conf file.
-1. Now, in fly view of QGC app select camera mode and click on red button to take an image. The image will be stored in the location given in imgcap section in conf file.
+1. Create a directory to store the image and update the location in `imgcap` section of the conf file.
+1. Now, in fly view of QGC app select *camera mode* and click on the red button to capture an image. The image will be stored in the location given in `imgcap` section in *conf* file.

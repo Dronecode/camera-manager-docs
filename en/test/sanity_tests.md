@@ -1,6 +1,6 @@
 # Sanity Tests
 
-This section outlines some basic sanity tests that you can use to verify that CSD is working properly.
+This section outlines some basic sanity tests that you can use to verify that the *Dronecode Camera Manager* (DCM) is working properly.
 
 <!-- need to check all for Gazebo too -->
 
@@ -21,7 +21,7 @@ crw-rw----+ 1 root video 81, 0 Mar  2 16:15 /dev/video0
 ls: cannot access 'dev/video*': No such file or directory
   ```
 
-If no camera is detected you'll need to further debug Linux (not a CSD problem).
+If no camera is detected you'll need to further debug Linux (not a DCM problem).
 
 > **Tip** You can also use the *v4l-utils* tools to detect compatible cameras. 
 > ```
@@ -29,14 +29,14 @@ If no camera is detected you'll need to further debug Linux (not a CSD problem).
 > v4l2-ctl --list-devices
 > ```
 
-## Verify CSD Startup
+## Verify DCM Startup
 
-This test verifies what cameras CSD has detected, what streams were created, and also confirms which services were started (i.e. RTSP video streaming, MAVLink and Avahi).
+This test verifies what cameras DCM has detected, what streams were created, and also confirms which services were started (i.e. RTSP video streaming, MAVLink and Avahi).
 
-Simply run CSD with verbose logging (via the `-v` flag). The example below shows the console output generated on a Ubuntu system with an integrated webcam:
+Simply run DCM with verbose logging (via the `-v` flag). The example below shows the console output generated on a Ubuntu system with an integrated webcam:
 
 ```
-$ ./csd -v -c samples/config/ubuntu.conf
+$ ./dcm -v -c samples/config/ubuntu.conf
 
 ConfFile: Adding section 'gstreamer'
 ConfFile: Adding section 'v4l2'
@@ -59,7 +59,7 @@ Adding stream /rsir (RealSense Infrared Camera)
 Adding stream /rsir2 (RealSense Infrared Camera2)
 AVAHI START
 
-Starting Camera Streaming Daemon
+Starting Dronecode Camera Manager
 UDP: [5] wrote 21 bytes
 ...
 ```

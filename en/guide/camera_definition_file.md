@@ -2,7 +2,7 @@
 
 As defined in the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html), a [Camera Definition File](https://mavlink.io/en/protocol/camera_def.html) may be used to specify information about a camera's advanced settings and parameters. A camera will supply the URI for its definition file on request (if one has been defined), so that the file can be downloaded and parsed by the client.
 
-> **Tip** Camera definition files for a number of cameras are provided in [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def). Definition files for attached Video4Linux (V4L2) devices can be create using [export_v4l2_param_xml](#export_v4l2_param_xml).  
+> **Tip** Camera definition files for a number of cameras are provided in [/samples/def](https://github.com/intel/camera-streaming-daemon/tree/master/samples/def). Additionally, the [export_v4l2_param_xml](#export_v4l2_param_xml) tool can automatically generate definition files for attached Video4Linux (V4L2) camera devices.
 
 The *Camera Definition Files* can be hosted anywhere that is accessible to clients (including *QGroundControl* and Dronecode SDK apps). Often the files are served from the computer running CSD.
 
@@ -68,14 +68,14 @@ The fragments below show typical mappings for Aero and Ubuntu:
 ## V4L2 Camera Definition File Generator {#export_v4l2_param_xml}
 
 The CSD project includes the *export_v4l2_param_xml* tool to automate creation of *Camera Definition Files* for attached Video4Linux (V4L2) devices. 
-The tool queries the device for all available settings in order to populate the file.
+The tool queries the device for all available controls in order to populate the file.
 
 The command syntax is:
 ```
 ./export_v4l2_param_xml -d  <device node>  - f <output camera-def-file-name>
 ```
 where:
-* `device node`: The V3L2 device (query available devices on the command line using: `ls -l /dev/video*`).
+* `device node`: The V4L2 device (query available devices on the command line using: `ls -l /dev/video*`).
 * `output camera-def-file-name`: The generated file path/filename.
 
 

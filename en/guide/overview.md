@@ -51,7 +51,7 @@ The MAVLink properties of CSD are specified in the [CSD Configuration File](../g
 
 All cameras share the same MAVLink system ID. This can (optionally) be defined in the configuration file to match the id of the associated autopilot. If the system id is not defined in the configuration file then CSD will initially use the default PX4 vehicle system ID (1) and then change to the id of the first autopilot it detects.
 
-Component IDs for each camera are allocated automatically and sequentially from [MAV_COMP_ID_CAMERA](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA) as cameras are connected (once all component ids are allocated further cameras are not addressable). For Gazebo-enabled CSD builds the first ID is allocated to the Gazebo plugin camera.
+Component IDs for each camera are allocated automatically and sequentially as cameras are connected, starting from [MAV_COMP_ID_CAMERA](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA). MAVLink supports up to 6 cameras in a system - once all component ids are allocated further cameras are not addressable. When the CSD is built with Gazebo enabled, the Gazebo camera has component ID `MAV_COMP_ID_CAMERA`.
 
 **Limitations:**
 

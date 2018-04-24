@@ -16,7 +16,7 @@ CSD supports the following key features:
 * Automatically attaches [compatible cameras](#supported_cameras) connected to the Linux computer when it is started.
 * RTSP video streaming from *all* connected cameras (for consumption by GCS or other video players).
 * RTSP video stream advertising/discovery using Avahi.
-* [MAVLink Camera Protocol](#mavlink_support) support for up to 5 cameras, enabling image capture and storage, and querying/setting camera options. <!-- but not yet video capture - Mar 2018 -->
+* [MAVLink Camera Protocol](#mavlink_support) support for up to 5 cameras, enabling image/video capture and storage, and querying/setting camera options.
 * Gazebo simulated camera backend (so you can view video streams from within a simulated environment)!
 * Configurable back-end that can be extended to interface with new types of cameras and new front-end protocols.
 
@@ -42,11 +42,12 @@ Advanced configuration information about individual cameras is specified in [Cam
 
 ## MAVLink Camera Protocol Implementation {#mavlink_support}
 
-CSD implements the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html) for image capture and getting/setting camera parameters and options. At time of writing (March 2018) video capture is not yet supported.
+CSD implements the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html) for image and video capture and storage, and for getting/setting camera parameters and options.
 
 The MAVLink properties of CSD are specified in the *CSD Configuration File*:
 * The [\[mavlink\]](../guide/configuration_file.md#mavlink) section is used to specify the MAVLink destination UDP port, the broadcast address for heartbeat messages, and the system id (which should be set to match the autopilot).
 * The [\[uri\]](../guide/configuration_file.md#uri) section specifies the device to URI mapping for [Camera Definition File](../guide/camera_definition_file.md).
+* The [\[imgcap\]](../guide/configuration_file.md#imgcap) and [\[vidcap\]](../guide/configuration_file.md#vidcap) sections specify the *default settings* for image and video capture, respectively.
 
 Component IDs for each camera are allocated automatically and sequentially from [MAV_COMP_ID_CAMERA2](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA2) to [MAV_COMP_ID_CAMERA6](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA6) (inclusive) as cameras are connected (once all component ids are allocated further cameras are not addressable).
 
@@ -54,4 +55,5 @@ Component IDs for each camera are allocated automatically and sequentially from 
 
 * At time of writing (March 2018) the camera protocol, and hence CSD, do not yet include a formal specification for managing or advertising RTSP video streams.
 * The MAVLink protocol supports up to 6 cameras in a single system (only 6 `component_id` values are defined). Currently only 5 cameras can be accessed via CSD (see [#142](https://github.com/intel/camera-streaming-daemon/issues/142)).
-* Video capture is not supported.
+* The default [image](../guide/configuration_file.md#imgcap) and [video](../guide/configuration_file.md#vidcap)
+capture settings cannot (yet) be overwritten using parameters/via a [Camera Definition File](../guide/camera_definition_file.md) (see [#161](https://github.com/Dronecode/camera-streaming-daemon/issues/161)).

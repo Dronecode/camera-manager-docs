@@ -69,7 +69,7 @@ Key | Description | Default
 `port` | MAVLink destination UDP port. | 14550
 `broadcast_addr` | Broadcast address to send MAVLink heartbeat messages. | 255.255.255.255
 `rtsp_server_addr` | IP address or hostname of the interface where the RTSP server is running. This is the address that will be used by the client to make the RTSP request. | 0.0.0.0
-`system_id` | System ID of the CSD to be used in MAVLink communications. This should typically match the ID of the connected autopilot (i.e. the CSD/connected cameras are considered MAVLink *components* of the autopilot *system*). | 42
+`system_id` | System ID of the CSD to be used in MAVLink communications. This should typically match the ID of the connected autopilot (i.e. the CSD/connected cameras are considered MAVLink *components* of the autopilot *system*). If not defined CSD will use 1 until it is able to read a value from an autopilot heartbeat. | 1
 
 Example (for Ubuntu):
 ```
@@ -80,8 +80,7 @@ rtsp_server_addr=127.0.0.1
 system_id=1
 ```
 
-> **Note** There is no `component-id` key because these IDs are auto-allocated by CSD (starting from 
-[MAV_COMP_ID_CAMERA2](https://mavlink.io/en/messages/common.html#MAV_COMP_ID_CAMERA2)). If more than 5 cameras are added the additional cameras will not be addressable, and CSD will log an error. 
+> **Note** There is no `component-id` key because these IDs are auto-allocated by CSD. If more than 6 cameras are added (5 when using Gazebo) the additional cameras will not be addressable, and CSD will log an error.
 
 ### [uri] {#uri}
 

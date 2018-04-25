@@ -121,10 +121,13 @@ Key | Description | Default
 `format` | Image format (number). <br>Possible values:<ul><li>2 (Jpeg/<code>IMAGE_FILE_JPEG</code>)</li></ul>Notes:<ul><li>Currently only Jpeg is <a href="https://github.com/Dronecode/camera-manager/issues/163">supported for image capture</a>.</li></ul> | 2 (JPEG).
 `location` | The local path with write permission where captured images will be saved (usually the system-standard "Temp" directory). The path should be accessible and writable. | /tmp/
 
-Example:
+Example (Ubuntu):
 ```
 [imgcap]
-location=~/Temp/
+width=640
+height=480
+format=2
+location=/tmp/
 ```
 
 ### [vidcap] {#vidcap}

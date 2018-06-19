@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions to DCM are welcome. We follow the [Github flow](https://guides.github.com/introduction/flow/) development model for both [source code](https://github.com/Dronecode/camera-manager) and [documentation](https://hamishwillee.gitbooks.io/camera-manager/content/en/).
+Contributions to DCM are welcome. We follow the [Github flow](https://guides.github.com/introduction/flow/) development model for both [source code](https://github.com/Dronecode/camera-manager) and [documentation](https://github.com/Dronecode/camera-manager-docs).
 
 Below we explain specific testing required by this project in order to submit changes, and also how to open a pull request.
 

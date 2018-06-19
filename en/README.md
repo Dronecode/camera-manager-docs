@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/Dronecode/camera-manager.svg?branch=master)](https://travis-ci.org/intel/camera-streaming-daemon)
 <a href="https://scan.coverity.com/projects/01org-camera-streaming-daemon"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/12056/badge.svg"/></a>
 
-The Dronecode *Camera Manager* (DCM) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/).
+The *Dronecode Camera Manager* (DCM) is an extensible Linux camera server for interfacing any camera with the [Dronecode Platform](https://www.dronecode.org/).
 
 DCM can connect to multiple cameras and provides access to them via the [MAVLink Camera Protocol](https://mavlink.io/en/protocol/camera.html) and RTSP video streams (it can also advertise available RTSP streams).
 

@@ -1,6 +1,6 @@
 {   
     "gitbook": ">= 3.2.2",
-    "title": "Camera Streaming Daemon Guide",
+    "title": "Dronecode Camera Manager Guide",
     "plugins": [
         "youtube",
         "richquotes",
@@ -41,19 +41,19 @@
                     "label": "Bug tracker",
                     "icon": "fa fa-bug",
                     "position" : "left",
-                    "url": "https://github.com/Dronecode/csd_docs/issues/new?title=Doc+Bug:+{{title}}&body=DESCRIBE+PROBLEM+WITH+DOCS+HERE%0A%0ABug+Page:+[{{title}}]({{url}})"
+                    "url": "https://github.com/Dronecode/camera-manager-docs/issues/new?title=Doc+Bug:+{{title}}&body=DESCRIBE+PROBLEM+WITH+DOCS+HERE%0A%0ABug+Page:+[{{title}}]({{url}})"
                     
                 },
                 {
                     "label": "GitHub",
                     "icon": "fa fa-github",
-                    "url": "https://github.com/Dronecode/csd_docs"
+                    "url": "https://github.com/Dronecode/camera-manager-docs"
                 },
                 {
                     "label": "Edit page on github",
                     "icon": "fa fa-pencil-square-o",
                     "position" : "left",
-                    "url": "https://github.com/Dronecode/csd_docs/edit/master/{{filepath_lang}}"
+                    "url": "https://github.com/Dronecode/camera-manager-docs/edit/master/{{filepath_lang}}"
                 }
             ]
         },

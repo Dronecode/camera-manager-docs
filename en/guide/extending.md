@@ -15,7 +15,7 @@ Video Streaming | Developers can implement new types of video streaming (e.g. HL
 
 ## Support Custom Camera Device
 
-Developers may want to add support for a new type of camera device that is not currently supported by DCM. To support a custom type of camera, a `PluginXXX` class derived from `PluginBase` and `CameraDeviceXXX` class derived from `CameraDevice` must be implemented. An example of a plugin for a custom camera device with classes `PluginCustom`(https://github.com/Dronecode/camera-manger/tree/master/plugins) and `CameraDeviceCustom`(https://github.com/Dronecode/camera-manger/tree/master/plugins) is added in the project and may be referenced.
+Developers may want to add support for a new type of camera device that is not currently supported by DCM. To support a custom type of camera, a `PluginXXX` class derived from `PluginBase` and `CameraDeviceXXX` class derived from `CameraDevice` must be implemented. An example of a plugin for a custom camera device with classes `PluginCustom`(https://github.com/Dronecode/camera-manager/tree/master/plugins/CustomCamera) and `CameraDeviceCustom`(https://github.com/Dronecode/camera-manager/tree/master/plugins/CustomCamera) is added in the project and may be referenced.
 The sections below detail these steps.
 
 ### 1. Extend PluginBase Class

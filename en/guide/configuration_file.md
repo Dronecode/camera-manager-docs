@@ -132,7 +132,7 @@ location=/tmp/
 
 ### [vidcap] {#vidcap}
 
-This section defines the *default* values used for video capture. With the exception of `location` it should be possible override the values over MAVLink using parameters defined in the [Camera Definition File](../guide/camera_definition_file.md).
+This section defines the *default* values used for *video capture* (**not** video streaming). With the exception of `location` it should be possible override the values over MAVLink using parameters defined in the [Camera Definition File](../guide/camera_definition_file.md).
 
 > **Note** At time of writing these default values cannot yet be overridden (see [#161](https://github.com/Dronecode/camera-manager/issues/161)).
 

@@ -58,7 +58,7 @@ To deploy DCM to Aero:
 > **Note** The Aero configuration file ([aero.conf](https://github.com/Dronecode/camera-manager/blob/master/samples/config/aero.conf)) and [autostart file](../guide/autostart.md) (*dronecode-camera-manager.service*) typically do not change or need to be updated. If required, you could do so using the following commands:
   ```
   scp samples/config/aero.conf uname@ip-addr:/etc/dcm/main.conf
-  scp dronecode-camera-manager.service uname@ip-addr:/lib/system/system/dronecode-camera-manager.service
+  scp dronecode-camera-manager.service uname@ip-addr:/lib/systemd/system/dronecode-camera-manager.service
   ```
 
 

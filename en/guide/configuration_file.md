@@ -178,7 +178,7 @@ Key | Description | Default
 -- | --- | ---
 `pipeline` | a gstreamer pipeline for encoding the the pipeline to be used for transmitting. For example, it's used int the ubuntu.conf example.| <empty>
 
-[ubuntu.conf full example](../../camera-manager/master/samples/config/ubuntu.conf)
+[ubuntu.conf full example](https://github.com/Dronecode/camera-manager/tree/master/samples/config/ubuntu.conf)
 ```shell
 [rtsp]
 pipeline=v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=I420 ! x264enc speed-preset=ultrafast tune=zerolatency ! rtph264pay name=pay0

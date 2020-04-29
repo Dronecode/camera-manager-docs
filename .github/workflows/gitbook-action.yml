@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Get date
+      uses: ajilraju/action-date@master
+      id: datestep
     - name: Checkout Book
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         path: book
     - name: Setting-up Book
@@ -20,17 +23,19 @@ jobs:
     - run: gitbook install book
     - run: gitbook build book ../gh-pages
     - name: Checkout gh-pages
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         repository: Dronecode/camera-manager.dronecode.org
         path: gh-pages
     - run: ls -l gh-pages
+    - run: echo ${{ steps.datestep.outputs }}
     - name: Deploying book
-    - uses: EndBug/add-and-commit@v4
+      uses: EndBug/add-and-commit@v4
       with:
         author_name: PX4BuildBot
         author_email: px4buildbot@px4.io
-        message: "gitbook build update ${{date}}"
+        #message: "gitbook build update ${{ date }}"
+        message: "gitbook build update"
         cwd: "gh-pages"
         add: "*"
       env:

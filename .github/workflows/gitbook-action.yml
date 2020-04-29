@@ -16,7 +16,7 @@ jobs:
         path: book
     - name: Setting-up Book
       uses: actions/setup-node@v1
-    - run: npm install gitbook-cli
+    - run: npm install gitbook-cli --global
     - run: gitbook install book
     - run: gitbook build book ../gh-pages
     - name: Checkout gh-pages

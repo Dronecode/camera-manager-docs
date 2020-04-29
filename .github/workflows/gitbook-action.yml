@@ -1,0 +1,37 @@
+name: Deploy DCM User Guide
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout gh-pages
+    - uses: actions/checkout@v2
+      with:
+        repository: Dronecode/camera-manager.dronecode.org
+        path: gh-pages
+    - name: Checkout Book
+    - uses: actions/checkout@v2
+      with:
+        path: main
+    - name: Setting-up Book
+      uses: actions/setup-node@v1
+    - run: cd main
+    - run: npm install gitbook-cli
+    - run: gitbook install
+    - run: gitbook build . ../gh-pages
+    - name: Deploying book
+    - uses: EndBug/add-and-commit@v4
+      with:
+        author_name: PX4BuildBot
+        author_email: px4buildbot@px4.io
+        message: "gitbook build update ${{date}}"
+        cwd: "gh-pages"
+        add: "*"
+      env:
+        GITHUB_TOKEN: ${{ secrets.PX4BOT_TOKEN }}

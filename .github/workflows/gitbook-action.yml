@@ -27,7 +27,7 @@ jobs:
     - run: ls -l gh-pages
     - run: echo ${{ env.BUILD_DATE }}
       env:
-        BUILD_DATE: echo date
+        BUILD_DATE: echo `date`
     - name: Deploying book
       uses: EndBug/add-and-commit@v4
       with:

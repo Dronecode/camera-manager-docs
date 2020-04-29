@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get date
-      uses: ajilraju/action-date@master
-      id: datestep
     - name: Checkout Book
       uses: actions/checkout@v2
       with:
@@ -28,7 +25,9 @@ jobs:
         repository: Dronecode/camera-manager.dronecode.org
         path: gh-pages
     - run: ls -l gh-pages
-    - run: echo ${{ steps.datestep.outputs }}
+    - run: echo ${{ env.BUILD_DATE }}
+      env:
+        BUILD_DATE: echo date
     - name: Deploying book
       uses: EndBug/add-and-commit@v4
       with:
@@ -40,3 +39,4 @@ jobs:
         add: "*"
       env:
         GITHUB_TOKEN: ${{ secrets.PX4BOT_TOKEN }}
+        BUILD_DATE: echo date

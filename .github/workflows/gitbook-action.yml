@@ -47,7 +47,7 @@ jobs:
         author_email: mrpollo@gmail.com
         message: "gitbook build update ${{ env.BUILD_DATE }}"
         cwd: "./gh-pages/"
-        add: "."
+        add: "master"
       env:
         GITHUB_TOKEN: ${{ secrets.PX4BOT_TOKEN }}
         BUILD_DATE: echo `date`

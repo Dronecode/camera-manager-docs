@@ -24,8 +24,7 @@ jobs:
       with:
         repository: Dronecode/camera-manager.dronecode.org
         path: gh-pages
-    - run: ls -l gh-pages
-    - run: echo ${{ env.BUILD_DATE }}
+    - run: ls -l gh-pages/master
       env:
         BUILD_DATE: echo `date`
     - name: Deploying book
@@ -33,10 +32,9 @@ jobs:
       with:
         author_name: PX4BuildBot
         author_email: px4buildbot@px4.io
-        #message: "gitbook build update ${{ date }}"
-        message: "gitbook build update"
+        message: "gitbook build update ${{ env.BUILD_DATE }}"
         cwd: "gh-pages"
         add: "*"
       env:
         GITHUB_TOKEN: ${{ secrets.PX4BOT_TOKEN }}
-        BUILD_DATE: echo date
+        BUILD_DATE: echo `date`

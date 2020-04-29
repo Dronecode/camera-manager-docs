@@ -33,9 +33,10 @@ jobs:
         path: "./book/"
     - name: Setting-up Book
       uses: actions/setup-node@v1
+    - run: ls -l
     - run: npm install gitbook-cli --global
     - run: gitbook install ./book
-    - run: gitbook build ./book ./gh-pages
+    - run: gitbook build ./book ./gh-pages/master
     - run: ls -l ./gh-pages/master
     - name: Deploying book to gh-pages repo
       uses: EndBug/add-and-commit@v4

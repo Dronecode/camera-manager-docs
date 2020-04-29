@@ -25,17 +25,18 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: Dronecode/camera-manager.dronecode.org
-        path: gh-pages
-    - run: ls -l gh-pages/master
+        path: "./gh-pages/"
+    - run: ls -l ./gh-pages/master
     - name: Checkout Book
       uses: actions/checkout@v2
       with:
-        path: book
+        path: "./book/"
     - name: Setting-up Book
       uses: actions/setup-node@v1
     - run: npm install gitbook-cli --global
-    - run: gitbook install book
-    - run: gitbook build book ../gh-pages
+    - run: gitbook install ./book
+    - run: gitbook build ./book ./gh-pages
+    - run: ls -l ./gh-pages/master
     - name: Deploying book to gh-pages repo
       uses: EndBug/add-and-commit@v4
       with:
@@ -44,7 +45,7 @@ jobs:
         author_name: mrpollo
         author_email: mrpollo@gmail.com
         message: "gitbook build update ${{ env.BUILD_DATE }}"
-        cwd: "gh-pages"
+        cwd: "./gh-pages/"
         add: "."
       env:
         GITHUB_TOKEN: ${{ secrets.PX4BOT_TOKEN }}

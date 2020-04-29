@@ -21,6 +21,12 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
+    - name: Checkout gh-pages
+      uses: actions/checkout@v2
+      with:
+        repository: Dronecode/camera-manager.dronecode.org
+        path: gh-pages
+    - run: ls -l gh-pages/master
     - name: Checkout Book
       uses: actions/checkout@v2
       with:
@@ -30,15 +36,7 @@ jobs:
     - run: npm install gitbook-cli --global
     - run: gitbook install book
     - run: gitbook build book ../gh-pages
-    - name: Checkout gh-pages
-      uses: actions/checkout@v2
-      with:
-        repository: Dronecode/camera-manager.dronecode.org
-        path: gh-pages
-    - run: ls -l gh-pages/master
-      env:
-        BUILD_DATE: echo `date`
-    - name: Deploying book
+    - name: Deploying book to gh-pages repo
       uses: EndBug/add-and-commit@v4
       with:
         #author_name: PX4BuildBot

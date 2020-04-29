@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout Book
+    - uses: actions/checkout@v2
+      with:
+        path: book
+    - name: Setting-up Book
+      uses: actions/setup-node@v1
+    - run: npm install gitbook-cli
+    - run: gitbook install book
+    - run: gitbook build book ../gh-pages
     - name: Checkout gh-pages
     - uses: actions/checkout@v2
       with:
         repository: Dronecode/camera-manager.dronecode.org
         path: gh-pages
-    - name: Checkout Book
-    - uses: actions/checkout@v2
-      with:
-        path: main
-    - name: Setting-up Book
-      uses: actions/setup-node@v1
-    - run: cd main
-    - run: npm install gitbook-cli
-    - run: gitbook install
-    - run: gitbook build . ../gh-pages
+    - run: ls -l gh-pages
     - name: Deploying book
     - uses: EndBug/add-and-commit@v4
       with:

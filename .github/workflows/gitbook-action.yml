@@ -30,8 +30,10 @@ jobs:
     - name: Deploying book
       uses: EndBug/add-and-commit@v4
       with:
-        author_name: PX4BuildBot
-        author_email: px4buildbot@px4.io
+        #author_name: PX4BuildBot
+        #author_email: px4buildbot@px4.io
+        author_name: mrpollo
+        author_email: mrpollo@gmail.com
         message: "gitbook build update ${{ env.BUILD_DATE }}"
         cwd: "gh-pages"
         add: "*"

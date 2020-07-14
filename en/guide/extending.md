@@ -15,39 +15,35 @@ Video Streaming | Developers can implement new types of video streaming (e.g. HL
 
 ## Support Custom Camera Device
 
-In order to support a new type of camera a custom class must be derived from `CameraDevice`. In addition, code must be added to detect the new device type and to instantiate the new custom camera device when this happens. The sections below detail these steps.
+Developers may want to add support for a new type of camera device that is not currently supported by DCM. To support a custom type of camera, a `PluginXXX` class derived from `PluginBase` and `CameraDeviceXXX` class derived from `CameraDevice` must be implemented. An example of a plugin for a custom camera device with classes `PluginCustom`(https://github.com/Dronecode/camera-manager/tree/master/plugins/CustomCamera) and `CameraDeviceCustom`(https://github.com/Dronecode/camera-manager/tree/master/plugins/CustomCamera) is added in the project and may be referenced.
+The sections below detail these steps.
 
-### 1. Extend CameraDevice Class
+### 1. Extend PluginBase Class
 
-To add support for new type of camera device in DCM, a custom class must be derived from `CameraDevice`. 
-An example `CameraDeviceCustom` (in green) can be seen in the [class diagram](../guide/architecture.md#class_diagram). 
-The class `CameraDeviceCustom` represents a custom type of camera device.
+Plugins are self-registering objects that discovers, enlists and creates camera devices.
+
+**Action**: `PluginCustom` must implement the pure virtual functions of the base class `PluginBase`.
+
+The plugin will prepare a list of camera devices that are attached to the system.
+
+**Action**: `PluginCustom` must implement a logic to discover camera devices.
+
+### 2. Extend CameraDevice Class
+
+To add support for new type of camera device in DCM, `CameraDeviceCustom` class must be derived from `CameraDevice`. 
 
 **Action**: `CameraDeviceCustom` must implement the pure virtual functions of the base class `CameraDevice`. 
 
-```cpp
-class CameraDeviceCustom final : public CameraDevice {
-public:
-    CameraDeviceGazebo(std::string device);
-    ~CameraDeviceGazebo();
-    std::string getDeviceId();
-    int getInfo(struct CameraInfo &camInfo);
-    bool isGstV4l2Src();
-    int init(CameraParameters &camParam);
-    int uninit();
-    int resetParams(CameraParameters &camParam);
-    int setParam(CameraParameters &camParam, std::string param, const char *param_value,
-                 size_t value_size, int param_type);
-```
+There are few methods in `CameraDevice` class that are not pure virtual. By default it returns `NOT_SUPPORTED`.
 
-**Action**: `CameraDeviceCustom` may overload other methods to provide the functionality.
+**Action**: `CameraDeviceCustom` may overload not-pure virtual methods to provide the functionality.
 
 The configurable parameters of the custom camera device can be exported to the client (GCS) for control. Setting of these parameters and resetting of all the parameters must be handled by the `CameraDeviceCustom` class.
 
 **Action*: `CameraDeviceCustom` must declare the parameter name (string), ID (int) and type (enum). Also set the default value of the parameter.
 
 ```cpp
-int CameraDeviceCustom::init(CameraParameters &camParam)
+CameraDevice::Status CameraDeviceCustom::init(CameraParameters &camParam)
 {
     camParam.setParameterIdType(CameraParameters::CAMERA_MODE,
                                 CameraParameters::PARAM_ID_CAMERA_MODE,
@@ -77,33 +73,9 @@ int CameraDeviceCustom::init(CameraParameters &camParam)
 **Action**: The `CameraDeviceCustom` must handle setting and resetting of the declared parameters.
 
 
-### 2. Detect Custom Camera Device
+### 3. Create CameraDevice
 
-There must be a logic to detect the custom camera device.
-For example V4L2 camera devices are detected by scanning the Linux device nodes `/dev/video*` and Gazebo camera is detected based on [--enable-gazebo](../getting_started/building_installation.md#configure) compile time flag.
-
-**Action**: Implement function to detect the custom camera device.
-
-```cpp
-int CameraServer::detect_devices_custom(ConfFile &conf, std::vector<CameraComponent *> &camList)
-```
-**Action**: Call the function `detect_devices_custom()` from the function that prepares the list of cameras in the system.
-
-```cpp
-// prepare the list of cameras in the system
-int CameraServer::detectCamera(ConfFile &conf)
-```
-
-### 3. Instantiate Custom Camera Device
-
-After detection of the custom camera device, `CameraServer` will instantiate a `CameraComponent` and pass the custom camera device ID to the `CameraComponent`. The `CameraComponent` will create an instance of `CameraDeviceCustom` object based on the string ID received from `CameraServer`.
-
-**Action** : Add conditional statement in [create_camera_device](https://github.com/Dronecode/camera-manager/blob/master/src/CameraComponent.cpp#L354) function to find if the string ID is of type custom camera and instantiate `CameraDeviceCustom` object.
-
-```cpp
-    } else if (camdev_name.find("camera/custom") != std::string::npos) {
-        return std::make_shared<CameraDeviceCustom>(camdev_name);
-```
+The `CameraServer` will query the `PluginManager` for the list of camera devices that are detected. `CameraServer` will create the `CameraDevice` if the device is not in the blacklist.
 
 ## Custom RTSP Video Stream
 
